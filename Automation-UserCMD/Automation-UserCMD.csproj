@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C5252C4E-F47A-4311-A524-3824C051A302}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Automation_UserCMD</RootNamespace>
+    <AssemblyName>Automation-UserCMD</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Excel.4.5">
+      <HintPath>..\..\..\..\..\..\..\Madhav\output\output\net45\Excel.4.5.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\..\..\..\..\..\Madhav\output\output\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FrmCMDValidation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmCMDValidation.Designer.cs">
+      <DependentUpon>FrmCMDValidation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmTincanValidations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmTincanValidations.Designer.cs">
+      <DependentUpon>FrmTincanValidations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HelperCommonMethods.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrmCMDValidation.resx">
+      <DependentUpon>FrmCMDValidation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmTincanValidations.resx">
+      <DependentUpon>FrmTincanValidations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="TestData\Inputs\AssetSkillMapping\AssetIdsInput.xls" />
+    <None Include="TestData\Inputs\AssetSkillMapping\AssetSkillsMapping.xls" />
+    <None Include="TestData\Inputs\ClassProductMapping\ClassProductAsscociation.xls" />
+    <None Include="TestData\Inputs\ClassProductMapping\ContainerIdsInput.xls" />
+    <None Include="TestData\Inputs\Class\Class.xls" />
+    <None Include="TestData\Inputs\Content %282%29.xlsx" />
+    <None Include="TestData\Inputs\ContentContainerMapping\ContentContainerMapping.xls" />
+    <None Include="TestData\Inputs\ContentContainer\Contentcontainer.xls" />
+    <None Include="TestData\Inputs\ContentContainer\ContentContainerNameIdsInput.xls" />
+    <None Include="TestData\Inputs\Skill\Skill.xls" />
+    <None Include="TestData\Inputs\Skill\SkillNameInput.xls" />
+    <None Include="TestData\Inputs\UserEnrollment\StudentIdsInput.xls" />
+    <None Include="TestData\Inputs\UserEnrollment\UserEnrollment.xls" />
+    <None Include="TestData\Inputs\Users\User-org.xls" />
+    <None Include="TestData\Inputs\Users\User.xls" />
+    <None Include="TestData\Outputs\ClassOutput.xlsx" />
+    <None Include="TestData\Outputs\ClassProdMappingOutput.xlsx" />
+    <None Include="TestData\Outputs\ContentContainerMappingOutput.xlsx" />
+    <None Include="TestData\Outputs\ContentContainerOutput.xlsx" />
+    <None Include="TestData\Outputs\UserEnrollmentOutput.xlsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExportToExcel\ExportToExcel\ExportToExcel.csproj">
+      <Project>{d88db4d7-09fe-4c0d-8ce1-616455c48469}</Project>
+      <Name>ExportToExcel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
