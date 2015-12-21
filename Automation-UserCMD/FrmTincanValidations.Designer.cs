@@ -221,7 +221,7 @@
             this.Controls.Add(this.lblTincanValidation);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.Name = "FrmTincanValidations";
-            this.Text = "FrmTincanValidations";
+            this.Text = "Tincan Validations";
             ((System.ComponentModel.ISupportInitialize)(this.dtTincanOutput)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

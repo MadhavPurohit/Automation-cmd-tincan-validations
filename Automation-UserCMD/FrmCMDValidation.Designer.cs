@@ -275,7 +275,7 @@
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.UserValidationCMD);
             this.Name = "FrmCMDValidation";
-            this.Text = "Form1";
+            this.Text = "CMD Validations";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -28,6 +28,7 @@ namespace Automation_UserCMD
                 //...
                 //3. DataSet - The result of each spreadsheet will be created in the result.Tables
                 excelReader.IsFirstRowAsColumnNames = true;
+
                 DataSet result = excelReader.AsDataSet();
                 //...
                 ////4. DataSet - Create column names from first row
