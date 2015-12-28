@@ -26,6 +26,11 @@ namespace Automation_UserCMD
         {
             try
             {
+
+
+                //HelperCommonMethods.charities();
+                
+                
                 //1. Get Directory
                 string rootdir = System.IO.Directory.GetCurrentDirectory();
                 rootdir = Path.GetDirectoryName(rootdir);

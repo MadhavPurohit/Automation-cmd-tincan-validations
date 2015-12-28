@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -666,14 +667,24 @@ namespace Automation_UserCMD
             missingdataforids = string.Empty;
             dtfinalSkill = dsMappingcsv.Tables[0].Copy();
             dtfinalSkill.Clear();
+            
             for (int i = 0; i < dsInputNameId.Tables[0].Rows.Count; i++)
             {
                 DataTable dtassetid = dsInputNameId.Tables[0];
                 DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
+
+                //MP - As above datatable is treating Blob columns as Double instead of string - implemented following change
+                DataTable dtCloned = dtAssetSkillAssoc.Clone();
+                dtCloned.Columns[2].DataType = typeof(string);
+                foreach (DataRow row in dtAssetSkillAssoc.Rows)
+                {
+                    dtCloned.ImportRow(row);
+                }
+            
                 string assetid = dsInputNameId.Tables[0].Rows[i][0].ToString();
                 if (!string.IsNullOrWhiteSpace(assetid))
                 {
-                    DataRow[] drUserEnrlDataforstudent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + assetid.ToString() + "'");
+                    DataRow[] drUserEnrlDataforstudent = dtCloned.Select(idcolumn + " = " + "'" + assetid.ToString() + "'");
 
                     if (drUserEnrlDataforstudent.Count() == 0)
                     {
@@ -734,7 +745,7 @@ namespace Automation_UserCMD
                                 if (string.IsNullOrEmpty(quesid[c]))
                                     break;
 
-                                DataRow[] drItemData = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + quesid[c] + "'");
+                                DataRow[] drItemData = dtCloned.Select(idcolumn + " = " + "'" + quesid[c] + "'");
                                 dtfinalSkill.ImportRow(drItemData[0]);
                             }
 
@@ -742,7 +753,7 @@ namespace Automation_UserCMD
                             dtfinalSkill.ImportRow(dr);
 
                             //3. Search for Assessment Parent in children column
-                            DataRow[] drAssessmentParent = dtAssetSkillAssoc.Select("children" + " like " + "'%" + assetid + "%'");
+                            DataRow[] drAssessmentParent = dtCloned.Select("children" + " like " + "'%" + assetid + "%'");
 
                             //Need to confirm - 1 assessment may have multip parents - considerning 1 parent as of now
                             dtfinalSkill.ImportRow(drAssessmentParent[0]);
@@ -752,14 +763,17 @@ namespace Automation_UserCMD
                             for (int parentcount = 0; parentcount < 5; parentcount++)
                             {
                                 //Apply Logic to get parent guid from string
-                                string[] parents = parent.Split(new string[] { "id : " }, StringSplitOptions.None);
-                                parents = parents[1].Split(new string[] { " ," }, StringSplitOptions.None);
-                                parent = parents[0].ToString();
-                                DataRow[] drItemParent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + parent.ToString() + "'");
-                                dtfinalSkill.ImportRow(drItemParent[0]);
-                                parent = drAssessmentParent[0].ToString();
 
-                                if (string.IsNullOrEmpty(parent) || string.IsNullOrWhiteSpace(parent))
+                                if (!(string.IsNullOrEmpty(parent) || string.IsNullOrWhiteSpace(parent) || parent.ToString() == "System.Data.DataRow"))
+                                {
+                                    string[] parents = parent.Split(new string[] { "id : " }, StringSplitOptions.None);
+                                    parents = parents[1].Split(new string[] { " ," }, StringSplitOptions.None);
+                                    parent = parents[0].ToString();
+                                    DataRow[] drItemParent = dtCloned.Select(idcolumn + " = " + "'" + parent.ToString() + "'");
+                                    dtfinalSkill.ImportRow(drItemParent[0]);
+                                    parent = drAssessmentParent[0].ToString();
+                                }
+                                if (string.IsNullOrEmpty(parent) || string.IsNullOrWhiteSpace(parent)|| parent.ToString() == "System.Data.DataRow")
                                     break;
                             }
                         }
@@ -1007,5 +1021,63 @@ namespace Automation_UserCMD
 
             return dtfinalSkill;
         }
+
+
+
+
+//MP - Might need to remove - Sample code
+
+        public static void charities()
+        {
+            WebRequest request = WebRequest.Create("https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/demo/Reports/Class&rs:Command=Render&rs:Format=CSV&StartDate=11/10/2015&EndDate=11/30/2015");
+
+            WebResponse Response = request.GetResponse();
+
+            StreamReader str = new StreamReader(request.GetResponse().GetResponseStream());
+            StreamWriter writer = new StreamWriter("c:\\temp\\tst1.txt", true);
+
+            while (str.Peek() >= 0)
+            {
+                writer.WriteLine(str.ReadLine());
+
+                //MessageBox.Show(str.ReadLine());
+
+            }
+            writer.Close();
+
+          //  DataTable dt = GetDataTableFromCsv("c:\\temp\\tst1.txt", true);
+
+           // grd1.DataSource = dt;
+
+        }
+
+        //private DataTable GetDataTableFromCsv(string path, bool isFirstRowHeader)
+        //{
+        //    string header = isFirstRowHeader ? "Yes" : "No";
+
+        //    string pathOnly = Path.GetDirectoryName(path);
+        //    string fileName = Path.GetFileName(path);
+
+        //    string sql = @"SELECT Name FROM [" + fileName + "]";
+
+        //    using (OleDbConnection connection = new OleDbConnection(
+        //              @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + pathOnly +
+        //              ";Extended Properties=\"Text;HDR=" + header + "\""))
+        //    using (OleDbCommand command = new OleDbCommand(sql, connection))
+        //    using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+        //    {
+        //        DataTable dataTable = new DataTable();
+        //        dataTable.Locale = CultureInfo.CurrentCulture;
+        //        adapter.Fill(dataTable);
+        //        return dataTable;
+        //    }
+        //}
+
+
+
+
+
+
+
     }
 }
