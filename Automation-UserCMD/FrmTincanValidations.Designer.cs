@@ -93,6 +93,7 @@
             this.btnUAChecklist.TabIndex = 4;
             this.btnUAChecklist.Text = "UA Checklist";
             this.btnUAChecklist.UseVisualStyleBackColor = true;
+            this.btnUAChecklist.Click += new System.EventHandler(this.btnUAChecklist_Click);
             // 
             // btnUANotebook
             // 

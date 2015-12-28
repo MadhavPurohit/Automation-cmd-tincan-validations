@@ -951,5 +951,61 @@ namespace Automation_UserCMD
                 dtfinalSkillError.Rows.Add(drerror);
                 return dtfinalSkillError;
         }
+
+        internal static DataTable ApplyTincanBusinessLogic_UAChecklist(string Assessmentid, string TeacherId, string StudentId, DataSet dsMappingcsv, string idcolumn, out string missingdataforids)
+        {
+            DataTable dtfinalSkill = new DataTable();
+            missingdataforids = string.Empty;
+            dtfinalSkill = dsMappingcsv.Tables[0].Copy();
+            dtfinalSkill.Clear();
+
+           string assetid = Assessmentid.ToString();
+           string ActorId = TeacherId.ToString();
+           DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
+               
+            
+            
+            if (!string.IsNullOrWhiteSpace(assetid))
+                {
+                    DataRow[] drUserEnrlDataforstudent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + TeacherId + "' and objectparentid = '" + assetid + "'");
+
+                    if (drUserEnrlDataforstudent.Count() == 0)
+                    {
+                        //No data available for this particular id in mapping sheet
+                        missingdataforids += "\n Data is missing for the assessment id" + assetid.ToString() + ", ";
+                    }
+
+                    else 
+                    {
+
+                        if (drUserEnrlDataforstudent.Count() > 1)
+                        {
+                            //No data available for this particular id in mapping sheet
+                            missingdataforids += "\n Warning - Multiple events getting triggered for same event assessment -" + assetid.ToString() + ", ";
+                        }
+
+                        foreach (DataRow dr in drUserEnrlDataforstudent)
+                        {
+                            
+                            if (dr["eventtype"].ToString() == "graded" && dr["objecttype"].ToString() == "question")
+                            {
+                                //Success - Got Graded Question Event
+                                // missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_QuestionMetadata(dr, assetid);
+                                dtfinalSkill.ImportRow(dr);
+                            }
+                            
+                            else
+                            {
+                                missingdataforids += "Graded question event missing for UA Checklist Type assessment - assessment id " + assetid.ToString();
+                            }
+                            
+                        }
+                    }
+                   
+                }
+
+
+            return dtfinalSkill;
+        }
     }
 }
