@@ -14,7 +14,7 @@ namespace Automation_UserCMD
     public class HelperCommonMethods
     {
 
-        public static DataSet ReadExcelToFillData(string filePath)
+        public static DataSet ReadExcelToFillData(string filePath, bool IsFirstRowAsColumnNames = true)
         {
 
             FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read);
@@ -28,7 +28,7 @@ namespace Automation_UserCMD
                 //IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
                 //...
                 //3. DataSet - The result of each spreadsheet will be created in the result.Tables
-                excelReader.IsFirstRowAsColumnNames = true;
+                excelReader.IsFirstRowAsColumnNames = IsFirstRowAsColumnNames;
 
                 DataSet result = excelReader.AsDataSet();
                 //...
@@ -45,6 +45,20 @@ namespace Automation_UserCMD
                 //6. Free resources (IExcelDataReader is IDisposable)
                 excelReader.Close();
 
+                if (!IsFirstRowAsColumnNames)
+                {
+
+                    foreach (DataColumn column in result.Tables[0].Columns)
+                    {
+                        string cName = result.Tables[0].Rows[3][column.ColumnName].ToString();
+                        if (!result.Tables[0].Columns.Contains(cName) && cName != "")
+                        {
+                            column.ColumnName = cName;
+                        }
+                    }
+
+                }
+                
                 return result;
 
             }
@@ -52,7 +66,7 @@ namespace Automation_UserCMD
             else
             {
                 IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-                excelReader.IsFirstRowAsColumnNames = true;
+                excelReader.IsFirstRowAsColumnNames = IsFirstRowAsColumnNames;
                 DataSet result = excelReader.AsDataSet();
                 //...
                 ////4. DataSet - Create column names from first row
@@ -67,6 +81,22 @@ namespace Automation_UserCMD
 
                 //6. Free resources (IExcelDataReader is IDisposable)
                 excelReader.Close();
+
+                if (!IsFirstRowAsColumnNames)
+                {
+
+                    foreach (DataColumn column in result.Tables[0].Columns)
+                    {
+                        string cName = result.Tables[0].Rows[3][column.ColumnName].ToString();
+                        if (!result.Tables[0].Columns.Contains(cName) && cName != "")
+                        {
+                            column.ColumnName = cName;
+                        }
+                    }
+
+                }
+
+                
                 return result;
             }
         }

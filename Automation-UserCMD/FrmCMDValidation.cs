@@ -38,16 +38,21 @@ namespace Automation_UserCMD
 
                 //2. Get corresponding file path
                 string studentfilepath = rootdir + @"\TestData\Inputs\UserEnrollment\StudentIdsInput.xls";
-                string userfilepath = rootdir + @"\TestData\Inputs\Users\User.xls";
+                string userfilepath = rootdir + @"\TestData\Inputs\Users\User.xlsx";
                 string OutputUser = rootdir + @"\TestData\Outputs\Users.xlsx";
                 string ErrorOutputUser = rootdir + @"\TestData\Outputs\UsersError.xlsx";
 
+                
                 //3. Fill Datasets
                 DataSet dsStudentid = HelperCommonMethods.ReadExcelToFillData(studentfilepath);
-                DataSet dsUserEnrollment = HelperCommonMethods.ReadExcelToFillData(userfilepath);
+                DataSet dsUserEnrollment = HelperCommonMethods.ReadExcelToFillData(userfilepath,false);
                 DataTable dtfinaluserenrolment = new DataTable();
                 string missingdataforids = string.Empty;
 
+                
+
+
+                
                 //4. Apply Business Logic - Mapping & Validations
                 string idcolumn = "id";
                 dtfinaluserenrolment = HelperCommonMethods.ApplyCMDBusinessLogic(dsStudentid, dsUserEnrollment, idcolumn, out missingdataforids);
