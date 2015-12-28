@@ -1,0 +1,4 @@
+*.exe
+*.pdb
+Automation-UserCMD/bin/Debug/ExportToExcel.exe
+*.cache
