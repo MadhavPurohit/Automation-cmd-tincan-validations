@@ -115,6 +115,7 @@ namespace Automation_UserCMD
             {
                 DataTable dtassetid = dsInputNameId.Tables[0];
                 DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
+
                 string assetid = dsInputNameId.Tables[0].Rows[i][0].ToString();
                 if (!string.IsNullOrWhiteSpace(assetid))
                 {
@@ -179,6 +180,7 @@ namespace Automation_UserCMD
             {
                 DataTable dtassetid = dsInputNameId.Tables[0];
                 DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
+
                 string assetid = dsInputNameId.Tables[0].Rows[i][0].ToString();
                 if (!string.IsNullOrWhiteSpace(assetid))
                 {
@@ -593,6 +595,7 @@ namespace Automation_UserCMD
             dtfinalClassOutput = dtclassInput.Copy();
             dtfinalClassOutput.Clear();
             erroroutput = string.Empty;
+            
             string Queryfilter = "organizationid = " + "'" + tbReqdInput + "'" + " and name like " + "'%" + inputclassfilter + "%'";
 
             DataRow[] drclassInput = dtclassInput.Select(Queryfilter);
@@ -615,6 +618,8 @@ namespace Automation_UserCMD
             {
                 DataTable dtassetid = dsInputNameId.Tables[0];
                 DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
+
+
                 string assetid = dsInputNameId.Tables[0].Rows[i][0].ToString();
                 if (!string.IsNullOrWhiteSpace(assetid))
                 {
@@ -704,17 +709,13 @@ namespace Automation_UserCMD
                 DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
 
                 //MP - As above datatable is treating Blob columns as Double instead of string - implemented following change
-                DataTable dtCloned = dtAssetSkillAssoc.Clone();
-                dtCloned.Columns[2].DataType = typeof(string);
-                foreach (DataRow row in dtAssetSkillAssoc.Rows)
-                {
-                    dtCloned.ImportRow(row);
-                }
+                dtAssetSkillAssoc =  ConvertDatatbleColumnsToString(dtAssetSkillAssoc,2);
+                
             
                 string assetid = dsInputNameId.Tables[0].Rows[i][0].ToString();
                 if (!string.IsNullOrWhiteSpace(assetid))
                 {
-                    DataRow[] drUserEnrlDataforstudent = dtCloned.Select(idcolumn + " = " + "'" + assetid.ToString() + "'");
+                    DataRow[] drUserEnrlDataforstudent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + assetid.ToString() + "'");
 
                     if (drUserEnrlDataforstudent.Count() == 0)
                     {
@@ -775,7 +776,7 @@ namespace Automation_UserCMD
                                 if (string.IsNullOrEmpty(quesid[c]))
                                     break;
 
-                                DataRow[] drItemData = dtCloned.Select(idcolumn + " = " + "'" + quesid[c] + "'");
+                                DataRow[] drItemData = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + quesid[c] + "'");
                                 dtfinalSkill.ImportRow(drItemData[0]);
                             }
 
@@ -783,7 +784,7 @@ namespace Automation_UserCMD
                             dtfinalSkill.ImportRow(dr);
 
                             //3. Search for Assessment Parent in children column
-                            DataRow[] drAssessmentParent = dtCloned.Select("children" + " like " + "'%" + assetid + "%'");
+                            DataRow[] drAssessmentParent = dtAssetSkillAssoc.Select("children" + " like " + "'%" + assetid + "%'");
 
                             //Need to confirm - 1 assessment may have multip parents - considerning 1 parent as of now
                             dtfinalSkill.ImportRow(drAssessmentParent[0]);
@@ -799,7 +800,7 @@ namespace Automation_UserCMD
                                     string[] parents = parent.Split(new string[] { "id : " }, StringSplitOptions.None);
                                     parents = parents[1].Split(new string[] { " ," }, StringSplitOptions.None);
                                     parent = parents[0].ToString();
-                                    DataRow[] drItemParent = dtCloned.Select(idcolumn + " = " + "'" + parent.ToString() + "'");
+                                    DataRow[] drItemParent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + parent.ToString() + "'");
                                     dtfinalSkill.ImportRow(drItemParent[0]);
                                     parent = drAssessmentParent[0].ToString();
                                 }
@@ -813,6 +814,18 @@ namespace Automation_UserCMD
             }
 
             return dtfinalSkill;
+        }
+
+        private static DataTable ConvertDatatbleColumnsToString(DataTable dtAssetSkillAssoc, int ColumnNo)
+        {
+            DataTable dtCloned = dtAssetSkillAssoc.Clone();
+            dtCloned.Columns[ColumnNo].DataType = typeof(string);
+            foreach (DataRow row in dtAssetSkillAssoc.Rows)
+            {
+                dtCloned.ImportRow(row);
+            }
+
+            return dtCloned;
         }
 
         internal static void HideColumnsfromReportContent(DataTable dtfinalContent)
@@ -833,6 +846,7 @@ namespace Automation_UserCMD
             dtfinalClassOutput = dtclassInput.Copy();
             dtfinalClassOutput.Clear();
             erroroutput = string.Empty;
+
             string Queryfilter = "name like " + "'%" + inputGradefilter + "%'";
 
             DataRow[] drclassInput = dtclassInput.Select(Queryfilter);
