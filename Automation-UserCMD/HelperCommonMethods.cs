@@ -58,7 +58,7 @@ namespace Automation_UserCMD
                     }
 
                 }
-                
+
                 return result;
 
             }
@@ -96,7 +96,7 @@ namespace Automation_UserCMD
 
                 }
 
-                
+
                 return result;
             }
         }
@@ -181,6 +181,8 @@ namespace Automation_UserCMD
                 DataTable dtassetid = dsInputNameId.Tables[0];
                 DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
 
+                string LastUserId=string.Empty;
+
                 string assetid = dsInputNameId.Tables[0].Rows[i][0].ToString();
                 if (!string.IsNullOrWhiteSpace(assetid))
                 {
@@ -194,15 +196,13 @@ namespace Automation_UserCMD
                         missingdataforids += "\n Data is mssing for following input id" + assetid.ToString() + ", ";
                     }
 
-
-
                     else if (drUserEnrlDataforstudent.Count() == 4)
                     {
                         foreach (DataRow dr in drUserEnrlDataforstudent)
                         {
-
                             if (thread > 1)
                             {
+                                missingdataforids += ValidateUniqueDetailsforData_Users(LastUserId, dr, assetid);
                                 if (item == 1)
                                     dr[3] = " ";
 
@@ -439,6 +439,8 @@ namespace Automation_UserCMD
                 errors += "\nMandatory column name is blank for - " + refid;
             }
 
+            
+
             return errors;
         }
 
@@ -595,17 +597,40 @@ namespace Automation_UserCMD
             dtfinalClassOutput = dtclassInput.Copy();
             dtfinalClassOutput.Clear();
             erroroutput = string.Empty;
-            
+
             string Queryfilter = "organizationid = " + "'" + tbReqdInput + "'" + " and name like " + "'%" + inputclassfilter + "%'";
 
             DataRow[] drclassInput = dtclassInput.Select(Queryfilter);
             foreach (DataRow dr in drclassInput)
             {
                 erroroutput += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Class(dr, tbReqdInput);
+                erroroutput += HelperCommonMethods.DoOtherValidations_Class(dr, tbReqdInput);
                 dtfinalClassOutput.ImportRow(dr);
             }
 
             return dtfinalClassOutput;
+        }
+
+        private static string DoOtherValidations_Class(DataRow dr, string refid)
+        {
+            string errors = string.Empty;
+
+            if (dr["name"].ToString().Contains('@') || dr["name"].ToString().Contains('%') || dr["name"].ToString().Contains('>') || dr["name"].ToString().Contains('<'))
+            {
+                errors += "Weird characters in column name - " + refid;
+            }
+
+            if (string.IsNullOrEmpty(dr["operation"].ToString()))
+            {
+                errors += "Operation column is blank for - " + refid;
+            }
+
+            else if (dr["operation"].ToString() != "update")
+            {
+                errors += "Operation is not update for -" + refid;
+            }
+
+            return errors;
         }
 
         internal static DataTable ApplyCMDBusinessLogic_ClassProdMapping(DataSet dsInputNameId, DataSet dsMappingcsv, string idcolumn, out string missingdataforids)
@@ -702,16 +727,16 @@ namespace Automation_UserCMD
             missingdataforids = string.Empty;
             dtfinalSkill = dsMappingcsv.Tables[0].Copy();
             dtfinalSkill.Clear();
-            
+
             for (int i = 0; i < dsInputNameId.Tables[0].Rows.Count; i++)
             {
                 DataTable dtassetid = dsInputNameId.Tables[0];
                 DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
 
                 //MP - As above datatable is treating Blob columns as Double instead of string - implemented following change
-                dtAssetSkillAssoc =  ConvertDatatbleColumnsToString(dtAssetSkillAssoc,2);
-                
-            
+                dtAssetSkillAssoc = ConvertDatatbleColumnsToString(dtAssetSkillAssoc, 2);
+
+
                 string assetid = dsInputNameId.Tables[0].Rows[i][0].ToString();
                 if (!string.IsNullOrWhiteSpace(assetid))
                 {
@@ -804,7 +829,7 @@ namespace Automation_UserCMD
                                     dtfinalSkill.ImportRow(drItemParent[0]);
                                     parent = drAssessmentParent[0].ToString();
                                 }
-                                if (string.IsNullOrEmpty(parent) || string.IsNullOrWhiteSpace(parent)|| parent.ToString() == "System.Data.DataRow")
+                                if (string.IsNullOrEmpty(parent) || string.IsNullOrWhiteSpace(parent) || parent.ToString() == "System.Data.DataRow")
                                     break;
                             }
                         }
@@ -1000,14 +1025,14 @@ namespace Automation_UserCMD
 
         internal static DataTable GenerateDataTableForErrors(DataTable dtfinalSkillError, string missingdataforids)
         {
-             dtfinalSkillError.Columns.Add("Sno");
-                dtfinalSkillError.Columns.Add("Error");
-                int errorsno = 1;
-                DataRow drerror = dtfinalSkillError.NewRow();
-                drerror[0] = errorsno;
-                drerror[1] = missingdataforids;
-                dtfinalSkillError.Rows.Add(drerror);
-                return dtfinalSkillError;
+            dtfinalSkillError.Columns.Add("Sno");
+            dtfinalSkillError.Columns.Add("Error");
+            int errorsno = 1;
+            DataRow drerror = dtfinalSkillError.NewRow();
+            drerror[0] = errorsno;
+            drerror[1] = missingdataforids;
+            dtfinalSkillError.Rows.Add(drerror);
+            return dtfinalSkillError;
         }
 
         internal static DataTable ApplyTincanBusinessLogic_UAChecklist(string Assessmentid, string TeacherId, string StudentId, DataSet dsMappingcsv, string idcolumn, out string missingdataforids)
@@ -1017,50 +1042,50 @@ namespace Automation_UserCMD
             dtfinalSkill = dsMappingcsv.Tables[0].Copy();
             dtfinalSkill.Clear();
 
-           string assetid = Assessmentid.ToString();
-           string ActorId = TeacherId.ToString();
-           DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
-               
-            
-            
-            if (!string.IsNullOrWhiteSpace(assetid))
-                {
-                    DataRow[] drUserEnrlDataforstudent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + TeacherId + "' and objectparentid = '" + assetid + "'");
+            string assetid = Assessmentid.ToString();
+            string ActorId = TeacherId.ToString();
+            DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
 
-                    if (drUserEnrlDataforstudent.Count() == 0)
+
+
+            if (!string.IsNullOrWhiteSpace(assetid))
+            {
+                DataRow[] drUserEnrlDataforstudent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + TeacherId + "' and objectparentid = '" + assetid + "'");
+
+                if (drUserEnrlDataforstudent.Count() == 0)
+                {
+                    //No data available for this particular id in mapping sheet
+                    missingdataforids += "\n Data is missing for the assessment id" + assetid.ToString() + ", ";
+                }
+
+                else
+                {
+
+                    if (drUserEnrlDataforstudent.Count() > 1)
                     {
                         //No data available for this particular id in mapping sheet
-                        missingdataforids += "\n Data is missing for the assessment id" + assetid.ToString() + ", ";
+                        missingdataforids += "\n Warning - Multiple events getting triggered for same event assessment -" + assetid.ToString() + ", ";
                     }
 
-                    else 
+                    foreach (DataRow dr in drUserEnrlDataforstudent)
                     {
 
-                        if (drUserEnrlDataforstudent.Count() > 1)
+                        if (dr["eventtype"].ToString() == "graded" && dr["objecttype"].ToString() == "question")
                         {
-                            //No data available for this particular id in mapping sheet
-                            missingdataforids += "\n Warning - Multiple events getting triggered for same event assessment -" + assetid.ToString() + ", ";
+                            //Success - Got Graded Question Event
+                            // missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_QuestionMetadata(dr, assetid);
+                            dtfinalSkill.ImportRow(dr);
                         }
 
-                        foreach (DataRow dr in drUserEnrlDataforstudent)
+                        else
                         {
-                            
-                            if (dr["eventtype"].ToString() == "graded" && dr["objecttype"].ToString() == "question")
-                            {
-                                //Success - Got Graded Question Event
-                                // missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_QuestionMetadata(dr, assetid);
-                                dtfinalSkill.ImportRow(dr);
-                            }
-                            
-                            else
-                            {
-                                missingdataforids += "Graded question event missing for UA Checklist Type assessment - assessment id " + assetid.ToString();
-                            }
-                            
+                            missingdataforids += "Graded question event missing for UA Checklist Type assessment - assessment id " + assetid.ToString();
                         }
+
                     }
-                   
                 }
+
+            }
 
 
             return dtfinalSkill;
@@ -1069,7 +1094,7 @@ namespace Automation_UserCMD
 
 
 
-//MP - Might need to remove - Sample code
+        //MP - Might need to remove - Sample code
 
         public static void charities()
         {
@@ -1089,9 +1114,9 @@ namespace Automation_UserCMD
             }
             writer.Close();
 
-          //  DataTable dt = GetDataTableFromCsv("c:\\temp\\tst1.txt", true);
+            //  DataTable dt = GetDataTableFromCsv("c:\\temp\\tst1.txt", true);
 
-           // grd1.DataSource = dt;
+            // grd1.DataSource = dt;
 
         }
 
@@ -1119,9 +1144,142 @@ namespace Automation_UserCMD
 
 
 
+        internal static DataTable ApplyCMDBusinessLogic_Users(DataSet dsInputNameId, DataSet dsMappingcsv, string idcolumn, out string missingdataforids)
+        {
+            DataTable dtfinalSkill = new DataTable();
+
+            missingdataforids = string.Empty;
+            dtfinalSkill = dsMappingcsv.Tables[0].Copy();
+            dtfinalSkill.Clear();
+            for (int i = 0; i < dsInputNameId.Tables[0].Rows.Count; i++)
+            {
+                DataTable dtassetid = dsInputNameId.Tables[0];
+                DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
+
+                string assetid = dsInputNameId.Tables[0].Rows[i][0].ToString();
+                string LastUserName = string.Empty;
+                if (!string.IsNullOrWhiteSpace(assetid))
+                {
+                    DataRow[] drUserEnrlDataforstudent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + assetid + "'");
+                    int thread = 0;
+                    int item = 0;
+
+                    if (drUserEnrlDataforstudent.Count() == 0)
+                    {
+                        //No data available for this particular id in mapping sheet
+                        missingdataforids += "\n Data is missing for id - " + assetid.ToString() + ", ";
+
+                    }
+
+                    else if (drUserEnrlDataforstudent.Count() == 4)
+                    {
+                        foreach (DataRow dr in drUserEnrlDataforstudent)
+                        {
+
+                            missingdataforids += ValidateUniqueDetailsforData_Users(LastUserName, dr, assetid);
+                            
+                           
+
+
+                            if (thread > 1)
+                            {
+                                if (item == 1)
+                                    dr[3] = " ";
+                                missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Users(dr, assetid);
+                                missingdataforids += HelperCommonMethods.DoOtherValidations_Users(dr, assetid);
+                                dtfinalSkill.ImportRow(dr);
+                                item++;
+                            }
+
+                            thread++;
+                        }
+                    }
+                    else
+                    {
+                        item = 0;
+                        foreach (DataRow dr in drUserEnrlDataforstudent)
+                        {
+                            missingdataforids += ValidateUniqueDetailsforData_Users(LastUserName, dr, assetid);
+
+                            if (item == 1)
+                                dr[3] = " ";
+                            missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Users(dr, assetid);
+                            missingdataforids += HelperCommonMethods.DoOtherValidations_Users(dr, assetid);
+                            dtfinalSkill.ImportRow(dr);
+                            item++;
+                        }
+                    }
+                }
+
+            }
+
+            return dtfinalSkill;
+        }
+
+        private static string ValidateUniqueDetailsforData_Users(string LastUserName, DataRow dr, string assetid)
+        {
+            string error = string.Empty;
+            if (!string.IsNullOrEmpty(LastUserName))
+            {
+                if (LastUserName != dr["lastname"].ToString())
+                {
+                    error += "\n Same guid for different users - " + assetid.ToString() + ", ";
+                }
+
+                LastUserName = dr["lastname"].ToString();
+            }
+
+            return error;
+
+        }
+
+        private static string ValidateUniqueDetailsforData_UserEnrollment(string LastUserName, DataRow dr, string assetid)
+        {
+            string error = string.Empty;
+            if (!string.IsNullOrEmpty(LastUserName))
+            {
+                if (LastUserName != dr["userid"].ToString())
+                {
+                    error += "\n Same guid for different users - " + assetid.ToString() + ", ";
+                }
+
+                LastUserName = dr["userid"].ToString();
+            }
+
+            return error;
+
+        }
+
+        private static string DoOtherValidations_Users(DataRow dr, string refid)
+        {
+            string errors = string.Empty;
+
+            if (string.IsNullOrEmpty(dr["id"].ToString()))
+            {
+                errors += "Operation column is blank for - " + refid;
+            }
+
+            else if (dr[0].ToString() != "update")
+            {
+                errors += "Operation is not update for -" + refid;
+            }
+
+            return errors;
+        }
 
 
 
+        private static string ValidateMandatoryAndReferenceItems_Users(DataRow dr, string refid)
+        {
+            string errors = string.Empty;
 
+            if (string.IsNullOrEmpty(dr["id"].ToString()))
+            {
+                errors += "\nMandatory column id is blank for - " + refid;
+            }
+
+
+            return errors;
+        }
     }
 }

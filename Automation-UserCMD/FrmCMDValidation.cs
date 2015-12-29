@@ -26,10 +26,7 @@ namespace Automation_UserCMD
         {
             try
             {
-
-
                 //HelperCommonMethods.charities();
-                
                 
                 //1. Get Directory
                 string rootdir = System.IO.Directory.GetCurrentDirectory();
@@ -48,14 +45,10 @@ namespace Automation_UserCMD
                 DataSet dsUserEnrollment = HelperCommonMethods.ReadExcelToFillData(userfilepath,false);
                 DataTable dtfinaluserenrolment = new DataTable();
                 string missingdataforids = string.Empty;
-
-                
-
-
                 
                 //4. Apply Business Logic - Mapping & Validations
                 string idcolumn = "id";
-                dtfinaluserenrolment = HelperCommonMethods.ApplyCMDBusinessLogic(dsStudentid, dsUserEnrollment, idcolumn, out missingdataforids);
+                dtfinaluserenrolment = HelperCommonMethods.ApplyCMDBusinessLogic_Users(dsStudentid, dsUserEnrollment, idcolumn, out missingdataforids);
 
                 //5. Hide not required column
                 HelperCommonMethods.HideColumnsfromReportUsersMapping(dtfinaluserenrolment);
