@@ -3,3 +3,6 @@
 Automation-UserCMD/bin/Debug/ExportToExcel.exe
 *.cache
 *.exe
+*.exe
+*.pdb
+*.cache

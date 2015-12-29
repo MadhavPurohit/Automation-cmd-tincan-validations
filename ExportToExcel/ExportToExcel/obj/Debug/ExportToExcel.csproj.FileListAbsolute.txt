@@ -24,3 +24,4 @@ C:\Madhav\code\Automation-UserCMD\Automation-cmd-tincan-validations\ExportToExce
 C:\Madhav\code\Automation-UserCMD\Automation-cmd-tincan-validations\ExportToExcel\ExportToExcel\obj\Debug\ExportToExcel.csproj.GenerateResource.Cache
 C:\Madhav\code\Automation-UserCMD\Automation-cmd-tincan-validations\ExportToExcel\ExportToExcel\obj\Debug\ExportToExcel.exe
 C:\Madhav\code\Automation-UserCMD\Automation-cmd-tincan-validations\ExportToExcel\ExportToExcel\obj\Debug\ExportToExcel.pdb
+C:\Madhav\code\Automation-UserCMD\Automation-cmd-tincan-validations\ExportToExcel\ExportToExcel\obj\Debug\ExportToExcel.csprojResolveAssemblyReference.cache

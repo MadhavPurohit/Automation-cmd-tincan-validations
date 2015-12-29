@@ -280,7 +280,7 @@ namespace Automation_UserCMD
 
                 string missingdataforids = string.Empty;
                 string idcolumn = "assetid";
-                dtfinalAssetSkillMapping = HelperCommonMethods.ApplyCMDBusinessLogic(dsassetid, dsAssetSkillMapping, idcolumn, out missingdataforids);
+                dtfinalAssetSkillMapping = HelperCommonMethods.ApplyCMDBusinessLogic_AssetSkill(dsassetid, dsAssetSkillMapping, idcolumn, out missingdataforids);
 
                 HelperCommonMethods.HideColumnsfromReportAssetSkillMapping(dtfinalAssetSkillMapping);
                 dataGridView1.DataSource = dtfinalAssetSkillMapping;
@@ -326,7 +326,7 @@ namespace Automation_UserCMD
 
                 string missingdataforids = string.Empty;
                 string idcolumn = "name";
-                dtfinalContentContainer = HelperCommonMethods.ApplyCMDBusinessLogic(dscontentnameid, dsContentContainer, idcolumn, out missingdataforids);
+                dtfinalContentContainer = HelperCommonMethods.ApplyCMDBusinessLogicForContentContainer(dscontentnameid, dsContentContainer, idcolumn, out missingdataforids);
 
                 HelperCommonMethods.HideColumnsfromReportContentContainer(dtfinalContentContainer);
                 dataGridView1.DataSource = dtfinalContentContainer;
@@ -424,7 +424,7 @@ namespace Automation_UserCMD
                 string idcolumn = "name";
 
                 //3. Apply Business Logic
-                dtfinalSkill = HelperCommonMethods.ApplyCMDBusinessLogic(dsskillName, dsSkillMapping, idcolumn, out missingdataforids);
+                dtfinalSkill = HelperCommonMethods.ApplyCMDBusinessLogic_Skill(dsskillName, dsSkillMapping, idcolumn, out missingdataforids);
 
                 //4. Hide not reqd. columns
                 HelperCommonMethods.HideColumnsfromReportSkill(dtfinalSkill);

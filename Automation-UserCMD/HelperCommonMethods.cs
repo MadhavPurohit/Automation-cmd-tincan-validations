@@ -104,7 +104,7 @@ namespace Automation_UserCMD
 
 
 
-        public static DataTable ApplyCMDBusinessLogic(DataSet dsInputNameId, DataSet dsMappingcsv, string idcoulmn, out string missingdataforids)
+        public static DataTable ApplyCMDBusinessLogic_AssetSkill(DataSet dsInputNameId, DataSet dsMappingcsv, string idcoulmn, out string missingdataforids)
         {
             DataTable dtfinalSkill = new DataTable();
 
@@ -130,8 +130,6 @@ namespace Automation_UserCMD
 
                     }
 
-
-
                     else if (drUserEnrlDataforstudent.Count() == 4)
                     {
                         foreach (DataRow dr in drUserEnrlDataforstudent)
@@ -142,6 +140,8 @@ namespace Automation_UserCMD
                                 if (item == 1)
                                     dr[3] = " ";
 
+                                missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_AssetSkill(dr, assetid);
+                                missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
                                 dtfinalSkill.ImportRow(dr);
                                 item++;
                             }
@@ -156,6 +156,9 @@ namespace Automation_UserCMD
                         {
                             if (item == 1)
                                 dr[3] = " ";
+
+                            missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_AssetSkill(dr, assetid);
+                            missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
                             dtfinalSkill.ImportRow(dr);
                             item++;
                         }
@@ -167,7 +170,114 @@ namespace Automation_UserCMD
             return dtfinalSkill;
         }
 
+        public static DataTable ApplyCMDBusinessLogic_Skill(DataSet dsInputNameId, DataSet dsMappingcsv, string idcoulmn, out string missingdataforids)
+        {
+            DataTable dtfinalSkill = new DataTable();
 
+            missingdataforids = string.Empty;
+            dtfinalSkill = dsMappingcsv.Tables[0].Copy();
+            dtfinalSkill.Clear();
+            for (int i = 0; i < dsInputNameId.Tables[0].Rows.Count; i++)
+            {
+                DataTable dtassetid = dsInputNameId.Tables[0];
+                DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
+
+                string assetid = dsInputNameId.Tables[0].Rows[i][0].ToString();
+                if (!string.IsNullOrWhiteSpace(assetid))
+                {
+                    DataRow[] drUserEnrlDataforstudent = dtAssetSkillAssoc.Select(idcoulmn + " = " + "'" + assetid + "'");
+                    int thread = 0;
+                    int item = 0;
+
+                    if (drUserEnrlDataforstudent.Count() == 0)
+                    {
+                        //No data available for this particular id in mapping sheet
+                        missingdataforids += "\n Data is missing for id - " + assetid.ToString() + ", ";
+
+                    }
+
+                    else if (drUserEnrlDataforstudent.Count() == 4)
+                    {
+                        foreach (DataRow dr in drUserEnrlDataforstudent)
+                        {
+
+                            if (thread > 1)
+                            {
+                                if (item == 1)
+                                    dr[3] = " ";
+
+                                missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Skill(dr, assetid);
+                                missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
+                                dtfinalSkill.ImportRow(dr);
+                                item++;
+                            }
+
+                            thread++;
+                        }
+                    }
+                    else
+                    {
+                        item = 0;
+                        foreach (DataRow dr in drUserEnrlDataforstudent)
+                        {
+                            if (item == 1)
+                                dr[3] = " ";
+
+                            missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Skill(dr, assetid);
+                            missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
+                            dtfinalSkill.ImportRow(dr);
+                            item++;
+                        }
+                    }
+                }
+
+            }
+
+            return dtfinalSkill;
+        }
+
+        private static string ValidateMandatoryAndReferenceItems_Skill(DataRow dr, string refid)
+        {
+            string errors = string.Empty;
+
+            if (string.IsNullOrEmpty(dr["id"].ToString()))
+            {
+                errors += "\nMandatory column id is blank for - " + refid;
+            }
+
+            if (string.IsNullOrEmpty(dr["name"].ToString()))
+            {
+                errors += "\nMandatory column name is blank for - " + refid;
+            }
+
+            if (string.IsNullOrEmpty(dr["code"].ToString()))
+            {
+                errors += "\nMandatory column code is blank for - " + refid;
+            }
+
+            if (string.IsNullOrEmpty(dr["level"].ToString()))
+            {
+                errors += "\nMandatory column level is blank for - " + refid;
+            }
+            return errors;
+        }
+
+        private static string ValidateMandatoryAndReferenceItems_AssetSkill(DataRow dr, string refid)
+        {
+            string errors = string.Empty;
+
+            if (string.IsNullOrEmpty(dr["id"].ToString()))
+            {
+                errors += "\nMandatory column id is blank for - " + refid;
+            }
+
+            if (string.IsNullOrEmpty(dr["skillframeworkid"].ToString()))
+            {
+                errors += "\nMandatory column skillframeworkid is blank for - " + refid;
+            }
+
+            return errors;
+        }   
 
         public static DataTable ApplyCMDBusinessLogic_UserEnrollment(DataSet dsInputNameId, DataSet dsMappingcsv, string idcoulmn, out string missingdataforids)
         {
@@ -208,6 +318,8 @@ namespace Automation_UserCMD
 
 
                                 missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_UserEnrollment(dr, assetid);
+                                missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
+
                                 dtfinalSkill.ImportRow(dr);
                                 item++;
                             }
@@ -224,6 +336,7 @@ namespace Automation_UserCMD
                                 dr[3] = " ";
 
                             missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_UserEnrollment(dr, assetid);
+                            missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
                             dtfinalSkill.ImportRow(dr);
                             item++;
                         }
@@ -336,6 +449,7 @@ namespace Automation_UserCMD
                                     dr[3] = " ";
 
                                 missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_ContentContainerMapping(dr, assetid);
+                                missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
                                 dtfinalSkill.ImportRow(dr);
                                 item++;
                             }
@@ -352,6 +466,7 @@ namespace Automation_UserCMD
                                 dr[3] = " ";
 
                             missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_ContentContainerMapping(dr, assetid);
+                            missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
                             dtfinalSkill.ImportRow(dr);
                             item++;
                         }
@@ -671,6 +786,7 @@ namespace Automation_UserCMD
                                     dr[3] = " ";
 
                                 missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_ClassProdMapping(dr, assetid);
+                                missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
                                 dtfinalSkill.ImportRow(dr);
                                 item++;
                             }
@@ -687,6 +803,8 @@ namespace Automation_UserCMD
                                 dr[3] = " ";
 
                             missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_ClassProdMapping(dr, assetid);
+                            missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
+
                             dtfinalSkill.ImportRow(dr);
                             item++;
                         }
@@ -955,6 +1073,7 @@ namespace Automation_UserCMD
                                     dr[3] = " ";
 
                                 missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_QuestionMetadata(dr, assetid);
+                                missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
                                 dtfinalSkill.ImportRow(dr);
                                 item++;
                             }
@@ -970,6 +1089,7 @@ namespace Automation_UserCMD
                             if (item == 1)
                                 dr[3] = " ";
                             missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_QuestionMetadata(dr, assetid);
+                            missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
                             dtfinalSkill.ImportRow(dr);
                             item++;
                         }
@@ -1186,7 +1306,7 @@ namespace Automation_UserCMD
                                 if (item == 1)
                                     dr[3] = " ";
                                 missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Users(dr, assetid);
-                                missingdataforids += HelperCommonMethods.DoOtherValidations_Users(dr, assetid);
+                                missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
                                 dtfinalSkill.ImportRow(dr);
                                 item++;
                             }
@@ -1204,7 +1324,7 @@ namespace Automation_UserCMD
                             if (item == 1)
                                 dr[3] = " ";
                             missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Users(dr, assetid);
-                            missingdataforids += HelperCommonMethods.DoOtherValidations_Users(dr, assetid);
+                            missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedDate(dr, assetid);
                             dtfinalSkill.ImportRow(dr);
                             item++;
                         }
@@ -1250,7 +1370,7 @@ namespace Automation_UserCMD
 
         }
 
-        private static string DoOtherValidations_Users(DataRow dr, string refid)
+        private static string DoValidations_OperationPerformedDate(DataRow dr, string refid)
         {
             string errors = string.Empty;
 
