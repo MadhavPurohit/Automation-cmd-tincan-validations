@@ -127,5 +127,19 @@ namespace Automation_UserCMD
                 HelperCommonMethods.SuccessErrorMessage(OutputTincan, missingdataforids);
             }
         }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            FrmAutomationSelector frmAutomationSelector = new FrmAutomationSelector();
+            frmAutomationSelector.Show();
+            this.Close();
+        }
+
+        private void lnkCmdValidation_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FrmCMDValidation frmcmdValidation = new FrmCMDValidation();
+            frmcmdValidation.Show();
+            this.Close();
+        }
     }
 }

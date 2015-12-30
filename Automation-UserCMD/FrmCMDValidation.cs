@@ -493,6 +493,7 @@ namespace Automation_UserCMD
         {
             FrmTincanValidations frmtincan = new FrmTincanValidations();
             frmtincan.Show();
+            this.Close();
         }
 
         private void btnFramework_Click(object sender, EventArgs e)
@@ -588,6 +589,13 @@ namespace Automation_UserCMD
             }
             //6. Show success failure message
             HelperCommonMethods.SuccessErrorMessage(OutputQuestionMetadata, missingdataforids);
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            FrmAutomationSelector frmtincan = new FrmAutomationSelector();
+            frmtincan.Show();
+            this.Close();
         }
     }
 }

@@ -50,6 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrmAutomationSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmAutomationSelector.Designer.cs">
+      <DependentUpon>FrmAutomationSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmCMDValidation.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,6 +71,9 @@
     <Compile Include="HelperCommonMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrmAutomationSelector.resx">
+      <DependentUpon>FrmAutomationSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmCMDValidation.resx">
       <DependentUpon>FrmCMDValidation.cs</DependentUpon>
     </EmbeddedResource>
@@ -79,6 +88,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -121,6 +131,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Images\imgHome.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

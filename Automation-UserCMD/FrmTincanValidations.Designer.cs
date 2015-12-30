@@ -45,7 +45,10 @@
             this.txtStudentId = new System.Windows.Forms.TextBox();
             this.dtTincanOutput = new System.Windows.Forms.DataGridView();
             this.lblOutput = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.lnkCmdValidation = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dtTincanOutput)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTincanValidation
@@ -199,11 +202,35 @@
             this.lblOutput.TabIndex = 16;
             this.lblOutput.Text = "Output";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::Automation_UserCMD.Properties.Resources.imgHome;
+            this.pictureBox1.Location = new System.Drawing.Point(26, 20);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(49, 37);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 18;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
+            // lnkCmdValidation
+            // 
+            this.lnkCmdValidation.AutoSize = true;
+            this.lnkCmdValidation.Location = new System.Drawing.Point(742, 29);
+            this.lnkCmdValidation.Name = "lnkCmdValidation";
+            this.lnkCmdValidation.Size = new System.Drawing.Size(85, 13);
+            this.lnkCmdValidation.TabIndex = 19;
+            this.lnkCmdValidation.TabStop = true;
+            this.lnkCmdValidation.Text = "CMD Validations";
+            this.lnkCmdValidation.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkCmdValidation_LinkClicked);
+            // 
             // FrmTincanValidations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(867, 466);
+            this.Controls.Add(this.lnkCmdValidation);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lblOutput);
             this.Controls.Add(this.dtTincanOutput);
             this.Controls.Add(this.txtStudentId);
@@ -225,6 +252,7 @@
             this.Name = "FrmTincanValidations";
             this.Text = "Tincan Validations";
             ((System.ComponentModel.ISupportInitialize)(this.dtTincanOutput)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -249,5 +277,7 @@
         private System.Windows.Forms.TextBox txtStudentId;
         private System.Windows.Forms.DataGridView dtTincanOutput;
         private System.Windows.Forms.Label lblOutput;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.LinkLabel lnkCmdValidation;
     }
 }

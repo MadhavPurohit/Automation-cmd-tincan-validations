@@ -45,3 +45,4 @@ C:\Madhav\code\Automation-UserCMD\Automation-cmd-tincan-validations\Automation-U
 C:\Madhav\code\Automation-UserCMD\Automation-cmd-tincan-validations\Automation-UserCMD\obj\Debug\Automation_UserCMD.FrmTincanValidations.resources
 C:\Madhav\code\Automation-UserCMD\Automation-cmd-tincan-validations\Automation-UserCMD\obj\Debug\Automation_UserCMD.Properties.Resources.resources
 C:\Madhav\code\Automation-UserCMD\Automation-cmd-tincan-validations\Automation-UserCMD\obj\Debug\Automation-UserCMD.csproj.GenerateResource.Cache
+C:\Madhav\code\Automation-UserCMD\Automation-cmd-tincan-validations\Automation-UserCMD\obj\Debug\Automation_UserCMD.FrmAutomationSelector.resources

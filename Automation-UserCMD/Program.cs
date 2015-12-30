@@ -16,7 +16,7 @@ namespace Automation_UserCMD
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmCMDValidation());
+            Application.Run(new FrmAutomationSelector());
         }
     }
 }
