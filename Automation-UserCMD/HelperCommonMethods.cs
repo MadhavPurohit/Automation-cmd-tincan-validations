@@ -1186,28 +1186,7 @@ namespace Automation_UserCMD
                 else
                 {
 
-                    if (drUserEnrlDataforstudent.Count() > 1)
-                    {
-                        //No data available for this particular id in mapping sheet
-                        missingdataforids += "\n Warning - Multiple events getting triggered for same event assessment -" + assetid.ToString() + ", ";
-                    }
-
-                    foreach (DataRow dr in drUserEnrlDataforstudent)
-                    {
-
-                        if (dr["eventtype"].ToString() == "graded" && dr["objecttype"].ToString() == "question")
-                        {
-                            //Success - Got Graded Question Event
-                            // missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_QuestionMetadata(dr, assetid);
-                            dtfinalSkill.ImportRow(dr);
-                        }
-
-                        else
-                        {
-                            missingdataforids += "Graded question event missing for UA Checklist Type assessment - assessment id " + assetid.ToString();
-                        }
-
-                    }
+                    missingdataforids += ValidateGradedQuestionTincanEvent(drUserEnrlDataforstudent, assetid, dtfinalSkill);
                 }
 
             }
@@ -1405,6 +1384,278 @@ namespace Automation_UserCMD
 
 
             return errors;
+        }
+
+        internal static DataTable ApplyTincanBusinessLogic_FixedAssessments(string Assessmentid, string TeacherId, string StudentId, DataSet dsMappingcsv, string idcolumn, out string missingdataforids)
+        {
+            DataTable dtfinalSkill = new DataTable();
+            missingdataforids = string.Empty;
+            dtfinalSkill = dsMappingcsv.Tables[0].Copy();
+            dtfinalSkill.Clear();
+
+            string assessmentid = Assessmentid.ToString();
+            //string ActorId = TeacherId.ToString();
+            DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
+
+            if (!string.IsNullOrWhiteSpace(assessmentid))
+            {
+                DataRow[] drTeacherActionInfo = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + TeacherId + "' and objectparentid = '" + assessmentid + "'");
+                DataRow[] drStudentActionInfo = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + StudentId + "'");// and objectparentid = '" + assessmentid + "'");
+
+
+                if (drStudentActionInfo.Count() == 0)
+                {
+                    //No data available for this particular id in mapping sheet
+                    missingdataforids += "\n Data is missing for the assessment id" + assessmentid.ToString() + " and student id " + StudentId.ToString();
+                }
+
+                else
+                {
+                    missingdataforids += ValidateOpenContentTincanEvent(drStudentActionInfo, assessmentid, dtfinalSkill);
+                    missingdataforids += ValidateSubmitQuestionTincanEvent(drStudentActionInfo, assessmentid, dtfinalSkill);
+                    missingdataforids += ValidateSubmitContentTincanEvent(drStudentActionInfo, assessmentid, dtfinalSkill);
+                }
+
+                if (drTeacherActionInfo.Count() == 0)
+                {
+                    //No data available for this particular id in mapping sheet
+                    missingdataforids += "\n Data is missing for the assessment id" + assessmentid.ToString() + " and teacher id " + TeacherId.ToString();
+                }
+
+                else
+                {
+                    missingdataforids += ValidateGradedQuestionTincanEvent(drTeacherActionInfo, assessmentid, dtfinalSkill);
+                    missingdataforids += ValidateGradedContentTincanEvent(drTeacherActionInfo, assessmentid, dtfinalSkill);
+                }
+            }
+
+            return dtfinalSkill;
+        }
+
+        private static string ValidateSubmitContentTincanEvent(DataRow[] drStudentActionInfo, string assessmentid, DataTable dtfinalSkill)
+        {
+            string missingdataforids = string.Empty;
+            bool FoundGradedQues = false;
+            int eventcount = 0;
+
+            if (drStudentActionInfo.Count() > 1)
+            {
+                //No data available for this particular id in mapping sheet
+               //// missingdataforids += "\n Warning - Multiple events getting triggered for same event assessment -" + assessmentid.ToString() + ", ";
+            }
+
+            foreach (DataRow dr in drStudentActionInfo)
+            {
+
+                if (dr["eventtype"].ToString() == "submit" && dr["objecttype"].ToString() == "content")
+                {
+                    //Success - Got Graded Question Event
+                    // missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_QuestionMetadata(dr, assetid);
+                    dtfinalSkill.ImportRow(dr);
+                    FoundGradedQues = true;
+                    eventcount++;
+                }
+
+              
+                
+                //else
+                //{
+                //    missingdataforids += "Graded question event missing for UA Checklist Type assessment - assessment id " + assetid.ToString();
+                //}
+
+            }
+
+            if (!FoundGradedQues)
+            {
+                missingdataforids += "\n Graded question event missing for assessment - assessment id " + assessmentid.ToString();
+            }
+
+            if (eventcount > 1)
+            {
+                missingdataforids += "\n Warning - Multiple submit content events getting triggered for same event assessment -" + assessmentid.ToString() + ", ";
+            }
+
+            return missingdataforids;
+        }
+
+        private static string ValidateSubmitQuestionTincanEvent(DataRow[] drStudentActionInfo, string assessmentid, DataTable dtfinalSkill)
+        {
+            string missingdataforids = string.Empty;
+            bool FoundGradedQues = false;
+            int eventcount = 0;
+
+            if (drStudentActionInfo.Count() > 1)
+            {
+                //No data available for this particular id in mapping sheet
+                ////missingdataforids += "\n Warning - Multiple events getting triggered for same event assessment -" + assessmentid.ToString() + ", ";
+            }
+
+            foreach (DataRow dr in drStudentActionInfo)
+            {
+
+                if (dr["eventtype"].ToString() == "submit" && dr["objecttype"].ToString() == "question")
+                {
+                    //Success - Got Graded Question Event
+                    // missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_QuestionMetadata(dr, assetid);
+                    dtfinalSkill.ImportRow(dr);
+                    FoundGradedQues = true;
+                    eventcount++;
+                }
+
+                
+                
+                //else
+                //{
+                //    missingdataforids += "Graded question event missing for UA Checklist Type assessment - assessment id " + assetid.ToString();
+                //}
+
+            }
+
+            if (!FoundGradedQues)
+            {
+                missingdataforids += "\n Graded question event missing for assessment - assessment id " + assessmentid.ToString();
+            }
+
+            if (eventcount > 1)
+            {
+                missingdataforids += "\n Warning - Multiple submit question events getting triggered for same event assessment -" + assessmentid.ToString() + ", ";
+            }
+            return missingdataforids;
+        }
+
+        private static string ValidateOpenContentTincanEvent(DataRow[] drStudentActionInfo, string assessmentid, DataTable dtfinalSkill)
+        {
+            string missingdataforids = string.Empty;
+            bool FoundGradedQues = false;
+            int eventcount = 0;
+
+            if (drStudentActionInfo.Count() > 1)
+            {
+                //No data available for this particular id in mapping sheet
+               //// missingdataforids += "\n Warning - Multiple events getting triggered for same event assessment -" + assessmentid.ToString() + ", ";
+            }
+
+            foreach (DataRow dr in drStudentActionInfo)
+            {
+
+                if (dr["eventtype"].ToString() == "attempted" && dr["objecttype"].ToString() == "content")
+                {
+                    //Success - Got Graded Question Event
+                    // missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_QuestionMetadata(dr, assetid);
+                    dtfinalSkill.ImportRow(dr);
+                    FoundGradedQues = true;
+                    eventcount++;
+                }
+                
+               
+                //else
+                //{
+                //    missingdataforids += "Graded question event missing for UA Checklist Type assessment - assessment id " + assetid.ToString();
+                //}
+
+            }
+
+            if (!FoundGradedQues)
+            {
+                missingdataforids += "\n Graded question event missing for assessment - assessment id " + assessmentid.ToString();
+            }
+           
+            if (eventcount > 1)
+            {
+                missingdataforids += "\n Warning - Multiple open content events getting triggered for same event assessment -" + assessmentid.ToString() + ", ";
+            }
+                
+            return missingdataforids;
+        }
+
+        private static string ValidateGradedQuestionTincanEvent(DataRow[] drUserEnrlDataforstudent, string assetid, DataTable dtfinalSkill)
+        {
+            string missingdataforids = string.Empty;
+            bool FoundGradedQues = false;
+            int eventcount = 0;
+            
+            if (drUserEnrlDataforstudent.Count() > 1)
+            {
+                //No data available for this particular id in mapping sheet
+               //// missingdataforids += "\n Warning - Multiple events getting triggered for same event assessment -" + assetid.ToString() + ", ";
+            }
+
+            foreach (DataRow dr in drUserEnrlDataforstudent)
+            {
+
+                if (dr["eventtype"].ToString() == "graded" && dr["objecttype"].ToString() == "question")
+                {
+                    //Success - Got Graded Question Event
+                    // missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_QuestionMetadata(dr, assetid);
+                    dtfinalSkill.ImportRow(dr);
+                    FoundGradedQues = true;
+                    eventcount++;
+                }
+
+                //else
+                //{
+                //    missingdataforids += "Graded question event missing for UA Checklist Type assessment - assessment id " + assetid.ToString();
+                //}
+
+               
+
+            }
+
+            if(!FoundGradedQues)
+            {
+                missingdataforids += "\n Graded question event missing for assessment - assessment id " + assetid.ToString();
+            }
+
+            if (eventcount > 1)
+            {
+                missingdataforids += "\n Warning - Multiple graded question events getting triggered for same event assessment -" + assetid.ToString() + ", ";
+            }
+
+            return missingdataforids;
+        }
+
+        private static string ValidateGradedContentTincanEvent(DataRow[] drUserEnrlDataforstudent, string assetid, DataTable dtfinalSkill)
+        {
+            string missingdataforids = string.Empty;
+            bool FoundGradedQues = false;
+            int eventcount = 0;
+
+            if (drUserEnrlDataforstudent.Count() > 1)
+            {
+                //No data available for this particular id in mapping sheet
+               ////missingdataforids += "\n Warning - Multiple events getting triggered for same event assessment -" + assetid.ToString() + ", ";
+            }
+
+            foreach (DataRow dr in drUserEnrlDataforstudent)
+            {
+
+                if (dr["eventtype"].ToString() == "graded" && dr["objecttype"].ToString() == "content")
+                {
+                    //Success - Got Graded Question Event
+                    // missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_QuestionMetadata(dr, assetid);
+                    dtfinalSkill.ImportRow(dr);
+                    FoundGradedQues = true;
+                    eventcount++;
+                }
+
+                //else
+                //{
+                //    missingdataforids += "Graded question event missing for UA Checklist Type assessment - assessment id " + assetid.ToString();
+                //}
+
+            }
+
+            if (!FoundGradedQues)
+            {
+                missingdataforids += "\nGraded question event missing for assessment - assessment id " + assetid.ToString();
+            }
+
+            if(eventcount>1)
+            {
+                missingdataforids += "\n Warning - Multiple Graded Content events getting triggered for same event assessment -" + assetid.ToString() + ", ";
+            }
+
+            return missingdataforids;
         }
     }
 }

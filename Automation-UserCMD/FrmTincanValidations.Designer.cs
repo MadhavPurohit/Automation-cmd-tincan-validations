@@ -66,6 +66,7 @@
             this.btnFixedAssmts.TabIndex = 1;
             this.btnFixedAssmts.Text = "Fixed Assessments";
             this.btnFixedAssmts.UseVisualStyleBackColor = true;
+            this.btnFixedAssmts.Click += new System.EventHandler(this.btnFixedAssmts_Click);
             // 
             // btnProjecr
             // 
