@@ -99,26 +99,42 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="TestData\Inputs\AssetSkillMapping\AssetIdsInput.xls" />
     <None Include="TestData\Inputs\AssetSkillMapping\AssetSkillsMapping.xls" />
     <None Include="TestData\Inputs\ClassProductMapping\ClassProductAsscociation.xls" />
-    <None Include="TestData\Inputs\ClassProductMapping\ContainerIdsInput.xls" />
     <None Include="TestData\Inputs\Class\Class.xls" />
-    <None Include="TestData\Inputs\Content %282%29.xlsx" />
     <None Include="TestData\Inputs\ContentContainerMapping\ContentContainerMapping.xls" />
     <None Include="TestData\Inputs\ContentContainer\Contentcontainer.xls" />
-    <None Include="TestData\Inputs\ContentContainer\ContentContainerNameIdsInput.xls" />
+    <None Include="TestData\Inputs\Content\Content.xlsx" />
+    <None Include="TestData\Inputs\Framework\Framework.xlsx" />
+    <None Include="TestData\Inputs\IdInputs\AssessmentIdsInput.xls" />
+    <None Include="TestData\Inputs\IdInputs\ContainerIdsInput.xls" />
+    <None Include="TestData\Inputs\IdInputs\ContentContainerNameIdsInput.xls" />
+    <None Include="TestData\Inputs\IdInputs\QuestionIdsInput.xls" />
+    <None Include="TestData\Inputs\IdInputs\SkillNameInput.xls" />
+    <None Include="TestData\Inputs\IdInputs\StudentIdsInput.xls" />
+    <None Include="TestData\Inputs\Question Metadata\Question.xlsx" />
     <None Include="TestData\Inputs\Skill\Skill.xls" />
-    <None Include="TestData\Inputs\Skill\SkillNameInput.xls" />
-    <None Include="TestData\Inputs\UserEnrollment\StudentIdsInput.xls" />
     <None Include="TestData\Inputs\UserEnrollment\UserEnrollment.xls" />
-    <None Include="TestData\Inputs\Users\User-org.xls" />
-    <None Include="TestData\Inputs\Users\User.xls" />
+    <None Include="TestData\Inputs\Users\User.xlsx" />
+    <None Include="TestData\Outputs\AssetSkillMappingOutput.xlsx" />
+    <None Include="TestData\Outputs\AssetSkillMappingOutputError.xlsx" />
     <None Include="TestData\Outputs\ClassOutput.xlsx" />
+    <None Include="TestData\Outputs\ClassOutputError.xlsx" />
     <None Include="TestData\Outputs\ClassProdMappingOutput.xlsx" />
+    <None Include="TestData\Outputs\ClassProdMappingOutputError.xlsx" />
     <None Include="TestData\Outputs\ContentContainerMappingOutput.xlsx" />
     <None Include="TestData\Outputs\ContentContainerOutput.xlsx" />
+    <None Include="TestData\Outputs\ContentOutput.xlsx" />
+    <None Include="TestData\Outputs\FrameworkOutput.xlsx" />
+    <None Include="TestData\Outputs\FrameworkOutputError.xlsx" />
+    <None Include="TestData\Outputs\QuestionMetadataOutput.xlsx" />
+    <None Include="TestData\Outputs\QuestionMetadataOutputError.xlsx" />
+    <None Include="TestData\Outputs\SkillOutput.xlsx" />
+    <None Include="TestData\Outputs\SkillOutputError.xlsx" />
     <None Include="TestData\Outputs\UserEnrollmentOutput.xlsx" />
+    <None Include="TestData\Outputs\Users.xlsx" />
+    <None Include="TestData\Outputs\UsersError.xlsx" />
+    <None Include="TestData\TincanInput\tincanevents.xls" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

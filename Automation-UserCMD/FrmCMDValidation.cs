@@ -34,7 +34,7 @@ namespace Automation_UserCMD
                 rootdir = Path.GetDirectoryName(rootdir);
 
                 //2. Get corresponding file path
-                string studentfilepath = rootdir + @"\TestData\Inputs\UserEnrollment\StudentIdsInput.xls";
+                string studentfilepath = rootdir + @"\TestData\Inputs\IdInputs\StudentIdsInput.xls";
                 string userfilepath = rootdir + @"\TestData\Inputs\Users\User.xlsx";
                 string OutputUser = rootdir + @"\TestData\Outputs\Users.xlsx";
                 string ErrorOutputUser = rootdir + @"\TestData\Outputs\UsersError.xlsx";
@@ -167,7 +167,7 @@ namespace Automation_UserCMD
                 rootdir = Path.GetDirectoryName(rootdir);
 
                 //1. Get file paths
-                string studentfilepath = rootdir + @"\TestData\Inputs\UserEnrollment\StudentIdsInput.xls";
+                string studentfilepath = rootdir + @"\TestData\Inputs\IdInputs\StudentIdsInput.xls";
                 string userEnrollmentfilepath = rootdir + @"\TestData\Inputs\UserEnrollment\UserEnrollment.xls";
                 string OutputUserEnrollment = rootdir + @"\TestData\Outputs\UserEnrollmentOutput.xlsx";
                 string ErrorOutputUserEnrollment = rootdir + @"\TestData\Outputs\UserEnrollmentOutputError.xlsx";
@@ -224,7 +224,7 @@ namespace Automation_UserCMD
                 rootdir = Path.GetDirectoryName(rootdir);
                 rootdir = Path.GetDirectoryName(rootdir);
 
-                string containerinputfilepath = rootdir + @"\TestData\Inputs\ClassProductMapping\ContainerIdsInput.xls";
+                string containerinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\ContainerIdsInput.xls";
                 string classProductAssfilepath = rootdir + @"\TestData\Inputs\ClassProductMapping\ClassProductAsscociation.xls";
                 string OutputClassProdMapping = rootdir + @"\TestData\Outputs\ClassProdMappingOutput.xlsx";
                 string ErrorOutputClassProdMapping = rootdir + @"\TestData\Outputs\ClassProdMappingOutputError.xlsx";
@@ -267,7 +267,10 @@ namespace Automation_UserCMD
                 rootdir = Path.GetDirectoryName(rootdir);
                 rootdir = Path.GetDirectoryName(rootdir);
 
-                string assetinputfilepath = rootdir + @"\TestData\Inputs\AssetSkillMapping\AssetIdsInput.xls";
+               // string assetinputfilepath = rootdir + @"\TestData\Inputs\AssetSkillMapping\AssetIdsInput.xls";
+
+                string assetinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\QuestionIdsInput.xls";
+
                 string AssetSkillMappingfilepath = rootdir + @"\TestData\Inputs\AssetSkillMapping\AssetSkillsMapping.xls";
                 string OutputAssetSkillMapping = rootdir + @"\TestData\Outputs\AssetSkillMappingOutput.xlsx";
                 string ErrorOutputAssetSkillMapping = rootdir + @"\TestData\Outputs\AssetSkillMappingOutputError.xlsx";
@@ -313,7 +316,7 @@ namespace Automation_UserCMD
                 rootdir = Path.GetDirectoryName(rootdir);
 
 
-                string contentnameidsinputfilepath = rootdir + @"\TestData\Inputs\ContentContainer\ContentContainerNameIdsInput.xls";
+                string contentnameidsinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\ContentContainerNameIdsInput.xls";
                 string ContentContainerfilepath = rootdir + @"\TestData\Inputs\ContentContainer\Contentcontainer.xls";
                 string OutputContentContainer = rootdir + @"\TestData\Outputs\ContentContainerOutput.xlsx";
                 string ErrorOutputContentContainer = rootdir + @"\TestData\Outputs\ContentContainerOutputError.xlsx";
@@ -411,7 +414,7 @@ namespace Automation_UserCMD
                 rootdir = Path.GetDirectoryName(rootdir);
 
                 //1. Get file Paths
-                string skillNameinputfilepath = rootdir + @"\TestData\Inputs\Skill\SkillNameInput.xls";
+                string skillNameinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\SkillNameInput.xls";
                 string SkillMappingfilepath = rootdir + @"\TestData\Inputs\Skill\Skill.xls";
                 string OutputSkill = rootdir + @"\TestData\Outputs\SkillOutput.xlsx";
                 string ErrorOutputSkill = rootdir + @"\TestData\Outputs\SkillOutputError.xlsx";
@@ -457,7 +460,7 @@ namespace Automation_UserCMD
             rootdir = Path.GetDirectoryName(rootdir);
 
             //1. Get file Paths
-            string AssessmentIdsinputfilepath = rootdir + @"\TestData\Inputs\Content\AssessmentIdsInput.xls";
+            string AssessmentIdsinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\AssessmentIdsInput.xls";
             string Contentfilepath = rootdir + @"\TestData\Inputs\Content\Content.xlsx";
             string OutputContent = rootdir + @"\TestData\Outputs\ContentOutput.xlsx";
             string ErrorOutputContent = rootdir + @"\TestData\Outputs\ContentOutputError.xlsx";
@@ -559,7 +562,7 @@ namespace Automation_UserCMD
             rootdir = Path.GetDirectoryName(rootdir);
 
             //1. Get file Paths
-            string QuestionIdinputfilepath = rootdir + @"\TestData\Inputs\Question Metadata\QuestionIdsInput.xls";
+            string QuestionIdinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\QuestionIdsInput.xls";
             string QuestionMappingfilepath = rootdir + @"\TestData\Inputs\Question Metadata\Question.xlsx";
             string OutputQuestionMetadata = rootdir + @"\TestData\Outputs\QuestionMetadataOutput.xlsx";
             string ErrorOutputQuestionMetadata = rootdir + @"\TestData\Outputs\QuestionMetadataOutputError.xlsx";
