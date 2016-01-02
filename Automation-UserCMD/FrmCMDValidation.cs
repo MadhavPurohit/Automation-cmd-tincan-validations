@@ -244,32 +244,44 @@ namespace Automation_UserCMD
                 rootdir = Path.GetDirectoryName(rootdir);
                 rootdir = Path.GetDirectoryName(rootdir);
 
-                string containerinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\ContainerIdsInput.xls";
+               // string containerinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\ContainerIdsInput.xls";
+
+                string containerinputfilepath = rootdir + @"\TestData\Outputs\ContentContainerOutput.xlsx";
+
                 string classProductAssfilepath = rootdir + @"\TestData\Inputs\ClassProductMapping\ClassProductAsscociation.xls";
                 string OutputClassProdMapping = rootdir + @"\TestData\Outputs\ClassProdMappingOutput.xlsx";
                 string ErrorOutputClassProdMapping = rootdir + @"\TestData\Outputs\ClassProdMappingOutputError.xlsx";
 
-                DataSet dscontainerid = HelperCommonMethods.ReadExcelToFillData(containerinputfilepath);
-                DataSet dsClassProdAssociation = HelperCommonMethods.ReadExcelToFillData(classProductAssfilepath);
-                DataTable dtfinalClassProdMapping = new DataTable();
-                dtfinalClassProdMapping = dsClassProdAssociation.Tables[0].Copy();
-                dtfinalClassProdMapping.Clear();
-
-                string missingdataforids = string.Empty;
-                string idcolumn = "contentcontainerid";
-                dtfinalClassProdMapping = HelperCommonMethods.ApplyCMDBusinessLogic_ClassProdMapping(dscontainerid, dsClassProdAssociation, idcolumn, out missingdataforids);
-
-                HelperCommonMethods.HideColumnsfromReportClassProdMapping(dtfinalClassProdMapping);
-                dataGridView1.DataSource = dtfinalClassProdMapping;
-                CreateExcelFile.CreateExcelDocument(dtfinalClassProdMapping, OutputClassProdMapping);
-
-                if (!string.IsNullOrEmpty(missingdataforids))
+                if (!File.Exists(containerinputfilepath))
                 {
-                    DataTable dtfinalSkillError = new DataTable("Errors");
-                    dtfinalSkillError = HelperCommonMethods.GenerateDataTableForErrors(dtfinalSkillError, missingdataforids);
-                    CreateExcelFile.CreateExcelDocument(dtfinalSkillError, ErrorOutputClassProdMapping);
+                    MessageBox.Show("Please execute Content Container cmd validation first to get content ids");
+
                 }
-                HelperCommonMethods.SuccessErrorMessage(OutputClassProdMapping, missingdataforids);
+
+                else
+                {
+                    DataSet dscontainerid = HelperCommonMethods.ReadExcelToFillData(containerinputfilepath);
+                    DataSet dsClassProdAssociation = HelperCommonMethods.ReadExcelToFillData(classProductAssfilepath);
+                    DataTable dtfinalClassProdMapping = new DataTable();
+                    dtfinalClassProdMapping = dsClassProdAssociation.Tables[0].Copy();
+                    dtfinalClassProdMapping.Clear();
+
+                    string missingdataforids = string.Empty;
+                    string idcolumn = "contentcontainerid";
+                    dtfinalClassProdMapping = HelperCommonMethods.ApplyCMDBusinessLogic_ClassProdMapping(dscontainerid, dsClassProdAssociation, idcolumn, out missingdataforids);
+
+                    HelperCommonMethods.HideColumnsfromReportClassProdMapping(dtfinalClassProdMapping);
+                    dataGridView1.DataSource = dtfinalClassProdMapping;
+                    CreateExcelFile.CreateExcelDocument(dtfinalClassProdMapping, OutputClassProdMapping);
+
+                    if (!string.IsNullOrEmpty(missingdataforids))
+                    {
+                        DataTable dtfinalSkillError = new DataTable("Errors");
+                        dtfinalSkillError = HelperCommonMethods.GenerateDataTableForErrors(dtfinalSkillError, missingdataforids);
+                        CreateExcelFile.CreateExcelDocument(dtfinalSkillError, ErrorOutputClassProdMapping);
+                    }
+                    HelperCommonMethods.SuccessErrorMessage(OutputClassProdMapping, missingdataforids);
+                }
             }
             catch (Exception ex)
             {
