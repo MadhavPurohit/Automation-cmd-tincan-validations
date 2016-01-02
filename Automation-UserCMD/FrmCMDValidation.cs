@@ -20,12 +20,32 @@ namespace Automation_UserCMD
         public FrmCMDValidation()
         {
             InitializeComponent();
+
+            AssignToolTipsToButtons();
+        }
+
+        private void AssignToolTipsToButtons()
+        {
+            ToolTip toolTip = new ToolTip();
+            toolTip.SetToolTip(Users, "Make sure UserId input file is present");
+            toolTip.SetToolTip(Class, "Please enter correct organization id and course");
+            toolTip.SetToolTip(UserValidationCMD, "Make sure UserId input file is present");
+            toolTip.SetToolTip(ClassProdMapping,"Make sure content id input file is present");
+            toolTip.SetToolTip(AssetSkillMapping, "Make sure question id input file is present");
+            toolTip.SetToolTip(ContentContainer,"Make sure content container name input file is present");
+            toolTip.SetToolTip(ContentContainerMapping,"Make sure content container cmd is executed");
+            toolTip.SetToolTip(btnSkill, "Make sure skill name input file is present");
+            toolTip.SetToolTip(btnContent,"Make sure assessment id input file is present");
+            toolTip.SetToolTip(QuestionMetadata,"Make sure question id input file is present");
+            toolTip.SetToolTip(btnFramework, "Please enter correct grade name filter");
+
         }
 
         private void Users_Click(object sender, EventArgs e)
         {
             try
             {
+
                 //HelperCommonMethods.charities();
                 
                 //1. Get Directory

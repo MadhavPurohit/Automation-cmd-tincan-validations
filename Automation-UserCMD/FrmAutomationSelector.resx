@@ -117,4 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Steps:
+1. Please select appropriate environment and valida date range.
+2. Please make sure required input files are properly updated, lke - AssessmentId, UserId, QuestionId, SkillName, Containerid
+3. You can find file path at - Root directory\TestData\Inputs\IdInputs
+4. Click on corresponding Automation trigger buttons to generate cmd or tincan mapping outputs</value>
+  </data>
 </root>

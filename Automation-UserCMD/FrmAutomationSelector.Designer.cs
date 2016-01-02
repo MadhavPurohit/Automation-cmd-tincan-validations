@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAutomationSelector));
             this.lblAutomationTitleHeader = new System.Windows.Forms.Label();
             this.btnNavigateCmdAutomation = new System.Windows.Forms.Button();
             this.btnNavigateTincanAutomation = new System.Windows.Forms.Button();
@@ -37,6 +38,7 @@
             this.lblEndDate = new System.Windows.Forms.Label();
             this.dtpStartDate = new System.Windows.Forms.DateTimePicker();
             this.dtpEndDate = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblAutomationTitleHeader
@@ -51,7 +53,7 @@
             // 
             // btnNavigateCmdAutomation
             // 
-            this.btnNavigateCmdAutomation.Location = new System.Drawing.Point(35, 279);
+            this.btnNavigateCmdAutomation.Location = new System.Drawing.Point(35, 217);
             this.btnNavigateCmdAutomation.Name = "btnNavigateCmdAutomation";
             this.btnNavigateCmdAutomation.Size = new System.Drawing.Size(203, 23);
             this.btnNavigateCmdAutomation.TabIndex = 4;
@@ -61,9 +63,9 @@
             // 
             // btnNavigateTincanAutomation
             // 
-            this.btnNavigateTincanAutomation.Location = new System.Drawing.Point(597, 279);
+            this.btnNavigateTincanAutomation.Location = new System.Drawing.Point(577, 217);
             this.btnNavigateTincanAutomation.Name = "btnNavigateTincanAutomation";
-            this.btnNavigateTincanAutomation.Size = new System.Drawing.Size(180, 23);
+            this.btnNavigateTincanAutomation.Size = new System.Drawing.Size(200, 23);
             this.btnNavigateTincanAutomation.TabIndex = 5;
             this.btnNavigateTincanAutomation.Text = "Navigate to TinCan Automation";
             this.btnNavigateTincanAutomation.UseVisualStyleBackColor = true;
@@ -94,7 +96,7 @@
             // lblStartDate
             // 
             this.lblStartDate.AutoSize = true;
-            this.lblStartDate.Location = new System.Drawing.Point(32, 173);
+            this.lblStartDate.Location = new System.Drawing.Point(32, 157);
             this.lblStartDate.Name = "lblStartDate";
             this.lblStartDate.Size = new System.Drawing.Size(88, 13);
             this.lblStartDate.TabIndex = 8;
@@ -104,7 +106,7 @@
             // lblEndDate
             // 
             this.lblEndDate.AutoSize = true;
-            this.lblEndDate.Location = new System.Drawing.Point(453, 173);
+            this.lblEndDate.Location = new System.Drawing.Point(453, 157);
             this.lblEndDate.Name = "lblEndDate";
             this.lblEndDate.Size = new System.Drawing.Size(85, 13);
             this.lblEndDate.TabIndex = 9;
@@ -112,23 +114,34 @@
             // 
             // dtpStartDate
             // 
-            this.dtpStartDate.Location = new System.Drawing.Point(166, 166);
+            this.dtpStartDate.Location = new System.Drawing.Point(166, 150);
             this.dtpStartDate.Name = "dtpStartDate";
             this.dtpStartDate.Size = new System.Drawing.Size(200, 20);
             this.dtpStartDate.TabIndex = 12;
             // 
             // dtpEndDate
             // 
-            this.dtpEndDate.Location = new System.Drawing.Point(577, 166);
+            this.dtpEndDate.Location = new System.Drawing.Point(577, 150);
             this.dtpEndDate.Name = "dtpEndDate";
             this.dtpEndDate.Size = new System.Drawing.Size(200, 20);
             this.dtpEndDate.TabIndex = 13;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(32, 281);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(591, 65);
+            this.label1.TabIndex = 14;
+            this.label1.Text = resources.GetString("label1.Text");
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // FrmAutomationSelector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(836, 355);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.dtpEndDate);
             this.Controls.Add(this.dtpStartDate);
             this.Controls.Add(this.lblEndDate);
@@ -156,5 +169,6 @@
         private System.Windows.Forms.Label lblEndDate;
         private System.Windows.Forms.DateTimePicker dtpStartDate;
         private System.Windows.Forms.DateTimePicker dtpEndDate;
+        private System.Windows.Forms.Label label1;
     }
 }
