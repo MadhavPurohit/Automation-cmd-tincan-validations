@@ -528,7 +528,8 @@ namespace Automation_UserCMD
         {
             if (!string.IsNullOrEmpty(missingdataforids))
             {
-                MessageBox.Show("Error!! \n\n Could not find any data for the following ids - " + missingdataforids + "\n\n You can find output file at- \n" + OutputUserEnrollment);
+                //MessageBox.Show("Error!! \n\n Could not find any data for the following ids - " + missingdataforids + "\n\n You can find output file at- \n" + OutputUserEnrollment);
+                MessageBox.Show("Error!! \n\n " + missingdataforids + "\n\n You can find output file at- \n" + OutputUserEnrollment);
             }
 
             else
@@ -1406,22 +1407,27 @@ namespace Automation_UserCMD
             //string ActorId = TeacherId.ToString();
             DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
 
+            //MP - As above datatable is treating Blob columns as Double instead of string - implemented following change
+            dtAssetSkillAssoc = ConvertDatatbleColumnsToString(dtAssetSkillAssoc, 11);
+
             if (!string.IsNullOrWhiteSpace(assessmentid))
             {
                 DataRow[] drTeacherActionInfo = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + TeacherId + "' and objectparentid = '" + assessmentid + "'");
-                DataRow[] drStudentActionInfo = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + StudentId + "'");// and objectparentid = '" + assessmentid + "'");
+                DataRow[] drTeacherActionInfoGrdContent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + TeacherId + "' and objectid = '" + assessmentid + "'");
+                DataRow[] drStudentActionInfo = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + StudentId + "'"+ " and objectid = '" + assessmentid + "'");
+                DataRow[] drStudentActionInfoSubmitQues = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + StudentId + "'" + " and objectparentid = '" + assessmentid + "'");
 
 
                 if (drStudentActionInfo.Count() == 0)
                 {
                     //No data available for this particular id in mapping sheet
-                    missingdataforids += "\n Data is missing for the assessment id" + assessmentid.ToString() + " and student id " + StudentId.ToString();
+                    missingdataforids += "\nEvents are missing for the assessment id" + assessmentid.ToString() + " and student id " + StudentId.ToString();
                 }
 
                 else
                 {
                     missingdataforids += ValidateOpenContentTincanEvent(drStudentActionInfo, assessmentid, dtfinalSkill);
-                    missingdataforids += ValidateSubmitQuestionTincanEvent(drStudentActionInfo, assessmentid, dtfinalSkill);
+                    missingdataforids += ValidateSubmitQuestionTincanEvent(drStudentActionInfoSubmitQues, assessmentid, dtfinalSkill);
                     missingdataforids += ValidateSubmitContentTincanEvent(drStudentActionInfo, assessmentid, dtfinalSkill);
                 }
 
@@ -1434,7 +1440,7 @@ namespace Automation_UserCMD
                 else
                 {
                     missingdataforids += ValidateGradedQuestionTincanEvent(drTeacherActionInfo, assessmentid, dtfinalSkill);
-                    missingdataforids += ValidateGradedContentTincanEvent(drTeacherActionInfo, assessmentid, dtfinalSkill);
+                    missingdataforids += ValidateGradedContentTincanEvent(drTeacherActionInfoGrdContent, assessmentid, dtfinalSkill);
                 }
             }
 
@@ -1522,7 +1528,7 @@ namespace Automation_UserCMD
 
             if (!FoundGradedQues)
             {
-                missingdataforids += "\n Graded question event missing for assessment - assessment id " + assessmentid.ToString();
+                missingdataforids += "\n Submit question event missing for assessment - assessment id " + assessmentid.ToString();
             }
 
             if (eventcount > 1)
@@ -1566,7 +1572,7 @@ namespace Automation_UserCMD
 
             if (!FoundGradedQues)
             {
-                missingdataforids += "\n Graded question event missing for assessment - assessment id " + assessmentid.ToString();
+                missingdataforids += "\n Open content event missing for assessment - assessment id " + assessmentid.ToString();
             }
            
             if (eventcount > 1)
@@ -1656,7 +1662,7 @@ namespace Automation_UserCMD
 
             if (!FoundGradedQues)
             {
-                missingdataforids += "\nGraded question event missing for assessment - assessment id " + assetid.ToString();
+                missingdataforids += "\nGraded Content event missing for assessment - assessment id " + assetid.ToString();
             }
 
             if(eventcount>1)
