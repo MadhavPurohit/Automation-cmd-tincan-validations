@@ -137,8 +137,8 @@ namespace Automation_UserCMD
 
                             if (thread > 1)
                             {
-                                if (item == 1)
-                                    dr[3] = " ";
+                                //if (item == 1)
+                                //    dr[3] = " ";
 
                                 missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_AssetSkill(dr, assetid);
                                 missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
@@ -154,8 +154,8 @@ namespace Automation_UserCMD
                         item = 0;
                         foreach (DataRow dr in drUserEnrlDataforstudent)
                         {
-                            if (item == 1)
-                                dr[3] = " ";
+                            //if (item == 1)
+                            //    dr[3] = " ";
 
                             missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_AssetSkill(dr, assetid);
                             missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
@@ -203,8 +203,8 @@ namespace Automation_UserCMD
 
                             if (thread > 1)
                             {
-                                if (item == 1)
-                                    dr[3] = " ";
+                                //if (item == 1)
+                                //    dr[3] = " ";
 
                                 missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Skill(dr, assetid);
                                 missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
@@ -220,8 +220,8 @@ namespace Automation_UserCMD
                         item = 0;
                         foreach (DataRow dr in drUserEnrlDataforstudent)
                         {
-                            if (item == 1)
-                                dr[3] = " ";
+                            //if (item == 1)
+                            //    dr[3] = " ";
 
                             missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Skill(dr, assetid);
                             missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
@@ -382,8 +382,8 @@ namespace Automation_UserCMD
 
                             if (thread > 1)
                             {
-                                if (item == 1)
-                                    dr[3] = " ";
+                                //if (item == 1)
+                                //    dr[3] = " ";
 
                                 missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_ContentContainer(dr, assetid);
                                 dtfinalSkill.ImportRow(dr);
@@ -398,8 +398,8 @@ namespace Automation_UserCMD
                         item = 0;
                         foreach (DataRow dr in drUserEnrlDataforstudent)
                         {
-                            if (item == 1)
-                                dr[3] = " ";
+                            //if (item == 1)
+                            //    dr[3] = " ";
 
                             missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_ContentContainer(dr, assetid);
                             dtfinalSkill.ImportRow(dr);
@@ -445,8 +445,8 @@ namespace Automation_UserCMD
 
                             if (thread > 1)
                             {
-                                if (item == 1)
-                                    dr[3] = " ";
+                                //if (item == 1)
+                                //    dr[3] = " ";
 
                                 missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_ContentContainerMapping(dr, assetid);
                                 missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
@@ -462,8 +462,8 @@ namespace Automation_UserCMD
                         item = 0;
                         foreach (DataRow dr in drUserEnrlDataforstudent)
                         {
-                            if (item == 1)
-                                dr[3] = " ";
+                            //if (item == 1)
+                            //    dr[3] = " ";
 
                             missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_ContentContainerMapping(dr, assetid);
                             missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
@@ -782,8 +782,8 @@ namespace Automation_UserCMD
 
                             if (thread > 1)
                             {
-                                if (item == 1)
-                                    dr[3] = " ";
+                                //if (item == 1)
+                                //    dr[3] = " ";
 
                                 missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_ClassProdMapping(dr, assetid);
                                 missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
@@ -799,8 +799,8 @@ namespace Automation_UserCMD
                         item = 0;
                         foreach (DataRow dr in drUserEnrlDataforstudent)
                         {
-                            if (item == 1)
-                                dr[3] = " ";
+                            //if (item == 1)
+                            //    dr[3] = " ";
 
                             missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_ClassProdMapping(dr, assetid);
                             missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
@@ -1083,8 +1083,8 @@ namespace Automation_UserCMD
 
                             if (thread > 1)
                             {
-                                if (item == 1)
-                                    dr[3] = " ";
+                                //if (item == 1)
+                                    //dr[3] = " ";
 
                                 missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_QuestionMetadata(dr, assetid);
                                 missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
@@ -1100,8 +1100,8 @@ namespace Automation_UserCMD
                         item = 0;
                         foreach (DataRow dr in drUserEnrlDataforstudent)
                         {
-                            if (item == 1)
-                                dr[3] = " ";
+                            //if (item == 1)
+                            //    dr[3] = " ";
                             missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_QuestionMetadata(dr, assetid);
                             missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
                             dtfinalSkill.ImportRow(dr);
@@ -1296,8 +1296,8 @@ namespace Automation_UserCMD
 
                             if (thread > 1)
                             {
-                                if (item == 1)
-                                    dr[3] = " ";
+                                //if (item == 1)
+                                //    dr[3] = " ";
                                 missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Users(dr, assetid);
                                 missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
                                 dtfinalSkill.ImportRow(dr);
@@ -1314,8 +1314,8 @@ namespace Automation_UserCMD
                         {
                             missingdataforids += ValidateUniqueDetailsforData_Users(LastUserName, dr, assetid);
 
-                            if (item == 1)
-                                dr[3] = " ";
+                            //if (item == 1)
+                            //    dr[3] = " ";
                             missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Users(dr, assetid);
                             missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
                             dtfinalSkill.ImportRow(dr);
