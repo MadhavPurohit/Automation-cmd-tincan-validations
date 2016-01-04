@@ -937,10 +937,10 @@ namespace Automation_UserCMD
                                 for (int parentcount = 0; parentcount < 5; parentcount++)
                                 {
                                     //Apply Logic to get parent guid from string
-
+                                    string[] parents = null;
                                     if (!(string.IsNullOrEmpty(parent) || string.IsNullOrWhiteSpace(parent) || parent.ToString() == "System.Data.DataRow"))
                                     {
-                                        string[] parents = parent.Split(new string[] { "id : " }, StringSplitOptions.None);
+                                        parents = parent.Split(new string[] { "id : " }, StringSplitOptions.None);
                                         parents = parents[1].Split(new string[] { " ," }, StringSplitOptions.None);
                                         parent = parents[0].ToString();
                                         DataRow[] drItemParent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + parent.ToString() + "'");
@@ -948,7 +948,13 @@ namespace Automation_UserCMD
                                         parent = drItemParent[0]["parents"].ToString().Replace("\"", " ");
                                     }
                                     if (string.IsNullOrEmpty(parent) || string.IsNullOrWhiteSpace(parent) || parent.ToString() == "System.Data.DataRow")
+                                    {
+                                        if (!parents[1].Contains("Unit"))
+                                        {
+                                            missingdataforids += "\n Unit is not High-Level Parent for " + assetid.ToString() + ", ";
+                                        }
                                         break;
+                                    }
                                 }
                         }
                     }
