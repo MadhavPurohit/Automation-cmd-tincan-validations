@@ -949,9 +949,12 @@ namespace Automation_UserCMD
                                     }
                                     if (string.IsNullOrEmpty(parent) || string.IsNullOrWhiteSpace(parent) || parent.ToString() == "System.Data.DataRow")
                                     {
-                                        if (!parents[1].Contains("Unit"))
+                                        if (parents.Count() > 0)
                                         {
-                                            missingdataforids += "\n Unit is not High-Level Parent for " + assetid.ToString() + ", ";
+                                            if (!parents[1].Contains("Unit"))
+                                            {
+                                                missingdataforids += "\n Unit is not High-Level Parent for " + assetid.ToString() + ", ";
+                                            }
                                         }
                                         break;
                                     }
