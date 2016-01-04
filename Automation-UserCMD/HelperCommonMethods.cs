@@ -925,31 +925,31 @@ namespace Automation_UserCMD
 
                             //2. Add AssessmentRow
                             dtfinalSkill.ImportRow(dr);
-
+                            assetid = assetid.Replace(" ", "");
                             //3. Search for Assessment Parent in children column
-                            DataRow[] drAssessmentParent = dtAssetSkillAssoc.Select("children" + " like " + "'%" + assetid + "%'");
+                                DataRow[] drAssessmentParent = dtAssetSkillAssoc.Select("children" + " like " + "'%" + assetid.Replace(" ","") + "%'");
 
-                            //Need to confirm - 1 assessment may have multip parents - considerning 1 parent as of now
-                            dtfinalSkill.ImportRow(drAssessmentParent[0]);
+                                //Need to confirm - 1 assessment may have multip parents - considerning 1 parent as of now
+                                dtfinalSkill.ImportRow(drAssessmentParent[0]);
 
-                            //4. Now move on to find parents of the hierarchy till Unit
-                            string parent = drAssessmentParent[0]["parents"].ToString().Replace("\"", " ");
-                            for (int parentcount = 0; parentcount < 5; parentcount++)
-                            {
-                                //Apply Logic to get parent guid from string
-
-                                if (!(string.IsNullOrEmpty(parent) || string.IsNullOrWhiteSpace(parent) || parent.ToString() == "System.Data.DataRow"))
+                                //4. Now move on to find parents of the hierarchy till Unit
+                                string parent = drAssessmentParent[0]["parents"].ToString().Replace("\"", " ");
+                                for (int parentcount = 0; parentcount < 5; parentcount++)
                                 {
-                                    string[] parents = parent.Split(new string[] { "id : " }, StringSplitOptions.None);
-                                    parents = parents[1].Split(new string[] { " ," }, StringSplitOptions.None);
-                                    parent = parents[0].ToString();
-                                    DataRow[] drItemParent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + parent.ToString() + "'");
-                                    dtfinalSkill.ImportRow(drItemParent[0]);
-                                    parent = drAssessmentParent[0].ToString();
+                                    //Apply Logic to get parent guid from string
+
+                                    if (!(string.IsNullOrEmpty(parent) || string.IsNullOrWhiteSpace(parent) || parent.ToString() == "System.Data.DataRow"))
+                                    {
+                                        string[] parents = parent.Split(new string[] { "id : " }, StringSplitOptions.None);
+                                        parents = parents[1].Split(new string[] { " ," }, StringSplitOptions.None);
+                                        parent = parents[0].ToString();
+                                        DataRow[] drItemParent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + parent.ToString() + "'");
+                                        dtfinalSkill.ImportRow(drItemParent[0]);
+                                        parent = drItemParent[0]["parents"].ToString().Replace("\"", " ");
+                                    }
+                                    if (string.IsNullOrEmpty(parent) || string.IsNullOrWhiteSpace(parent) || parent.ToString() == "System.Data.DataRow")
+                                        break;
                                 }
-                                if (string.IsNullOrEmpty(parent) || string.IsNullOrWhiteSpace(parent) || parent.ToString() == "System.Data.DataRow")
-                                    break;
-                            }
                         }
                     }
                 }
@@ -1008,26 +1008,26 @@ namespace Automation_UserCMD
 
             if (string.IsNullOrEmpty(dr["id"].ToString()))
             {
-                errors += "\nMandatory column id is blank for - " + refid;
+                errors += "\nMandatory column id is blank for search filter - " + refid;
             }
 
             if (string.IsNullOrEmpty(dr["name"].ToString()))
             {
-                errors += "\nMandatory column name is blank for - " + refid;
+                errors += "\nMandatory column name is blank for search filter - " + refid;
             }
 
             if (string.IsNullOrEmpty(dr["type"].ToString()))
             {
-                errors += "\nMandatory column type is blank for - " + refid;
+                errors += "\nMandatory column type is blank for search filter - " + refid;
             }
 
             if (string.IsNullOrEmpty(dr["grade"].ToString()))
             {
-                errors += "\nMandatory column grade is blank for - " + refid;
+                errors += "\nMandatory column grade is blank for search filter - " + refid;
             }
             if (string.IsNullOrEmpty(dr["subject"].ToString()))
             {
-                errors += "\nMandatory column subject is blank for - " + refid;
+                errors += "\nMandatory column subject is blank for search filter - " + refid;
             }
             
 
