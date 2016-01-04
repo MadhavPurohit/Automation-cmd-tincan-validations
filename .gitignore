@@ -9,3 +9,6 @@ Automation-UserCMD/bin/Debug/ExportToExcel.exe
 *.exe
 Automation-UserCMD/bin/Debug/ExportToExcel.pdb
 *.cache
+Automation-UserCMD/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+*.cache
+Automation-UserCMD/bin/Debug/Automation-UserCMD.vshost.exe.manifest

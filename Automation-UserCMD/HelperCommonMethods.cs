@@ -116,7 +116,7 @@ namespace Automation_UserCMD
                 DataTable dtassetid = dsInputNameId.Tables[0];
                 DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
 
-                string assetid = dsInputNameId.Tables[0].Rows[i][0].ToString();
+                string assetid = dsInputNameId.Tables[0].Rows[i][1].ToString();
                 if (!string.IsNullOrWhiteSpace(assetid))
                 {
                     DataRow[] drUserEnrlDataforstudent = dtAssetSkillAssoc.Select(idcoulmn + " = " + "'" + assetid + "'");
@@ -760,7 +760,7 @@ namespace Automation_UserCMD
                 DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
 
 
-                string assetid = dsInputNameId.Tables[0].Rows[i][0].ToString();
+                string assetid = dsInputNameId.Tables[0].Rows[i][1].ToString();
                 if (!string.IsNullOrWhiteSpace(assetid))
                 {
                     DataRow[] drUserEnrlDataforstudent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + assetid + "'");
@@ -1052,7 +1052,7 @@ namespace Automation_UserCMD
             {
                 DataTable dtassetid = dsInputNameId.Tables[0];
                 DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
-                string assetid = dsInputNameId.Tables[0].Rows[i][0].ToString();
+                string assetid = dsInputNameId.Tables[0].Rows[i][1].ToString();
                 if (!string.IsNullOrWhiteSpace(assetid))
                 {
                     DataRow[] drUserEnrlDataforstudent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + assetid + "'");
@@ -1656,6 +1656,20 @@ namespace Automation_UserCMD
             }
 
             return missingdataforids;
+        }
+
+        internal static DataSet FillNewDatasetForQuestion(DataSet dsassetid)
+        {
+            DataSet dsassetidnw = new DataSet();
+            DataRow[] drquesinp = dsassetid.Tables[0].Select("type = 'question'");
+            dsassetidnw = dsassetid.Copy();
+            dsassetidnw.Clear();
+            foreach (DataRow drinp in drquesinp)
+            {
+                dsassetidnw.Tables[0].ImportRow(drinp);
+            }
+
+            return dsassetidnw;
         }
     }
 }

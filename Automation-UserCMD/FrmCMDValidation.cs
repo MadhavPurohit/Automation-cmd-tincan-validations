@@ -30,13 +30,13 @@ namespace Automation_UserCMD
             toolTip.SetToolTip(Users, "Make sure UserId input file is present");
             toolTip.SetToolTip(Class, "Please enter correct organization id and course");
             toolTip.SetToolTip(UserValidationCMD, "Make sure UserId input file is present");
-            toolTip.SetToolTip(ClassProdMapping,"Make sure content id input file is present");
+            toolTip.SetToolTip(ClassProdMapping, "Make sure content id input file is present");
             toolTip.SetToolTip(AssetSkillMapping, "Make sure question id input file is present");
-            toolTip.SetToolTip(ContentContainer,"Make sure content container name input file is present");
-            toolTip.SetToolTip(ContentContainerMapping,"Make sure content container cmd is executed");
+            toolTip.SetToolTip(ContentContainer, "Make sure content container name input file is present");
+            toolTip.SetToolTip(ContentContainerMapping, "Make sure content container cmd is executed");
             toolTip.SetToolTip(btnSkill, "Make sure skill name input file is present");
-            toolTip.SetToolTip(btnContent,"Make sure assessment id input file is present");
-            toolTip.SetToolTip(QuestionMetadata,"Make sure question id input file is present");
+            toolTip.SetToolTip(btnContent, "Make sure assessment id input file is present");
+            toolTip.SetToolTip(QuestionMetadata, "Make sure question id input file is present");
             toolTip.SetToolTip(btnFramework, "Please enter correct grade name filter");
 
         }
@@ -47,7 +47,7 @@ namespace Automation_UserCMD
             {
 
                 //HelperCommonMethods.charities();
-                
+
                 //1. Get Directory
                 string rootdir = System.IO.Directory.GetCurrentDirectory();
                 rootdir = Path.GetDirectoryName(rootdir);
@@ -59,13 +59,13 @@ namespace Automation_UserCMD
                 string OutputUser = rootdir + @"\TestData\Outputs\Users.xlsx";
                 string ErrorOutputUser = rootdir + @"\TestData\Outputs\UsersError.xlsx";
 
-                
+
                 //3. Fill Datasets
                 DataSet dsStudentid = HelperCommonMethods.ReadExcelToFillData(studentfilepath);
-                DataSet dsUserEnrollment = HelperCommonMethods.ReadExcelToFillData(userfilepath,false);
+                DataSet dsUserEnrollment = HelperCommonMethods.ReadExcelToFillData(userfilepath, false);
                 DataTable dtfinaluserenrolment = new DataTable();
                 string missingdataforids = string.Empty;
-                
+
                 //4. Apply Business Logic - Mapping & Validations
                 string idcolumn = "id";
                 dtfinaluserenrolment = HelperCommonMethods.ApplyCMDBusinessLogic_Users(dsStudentid, dsUserEnrollment, idcolumn, out missingdataforids);
@@ -76,7 +76,7 @@ namespace Automation_UserCMD
 
                 //6. Generate output excel
                 CreateExcelFile.CreateExcelDocument(dtfinaluserenrolment, OutputUser);
-                
+
                 //7. Error Excel Genrate
                 if (!string.IsNullOrEmpty(missingdataforids))
                 {
@@ -244,7 +244,7 @@ namespace Automation_UserCMD
                 rootdir = Path.GetDirectoryName(rootdir);
                 rootdir = Path.GetDirectoryName(rootdir);
 
-               // string containerinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\ContainerIdsInput.xls";
+                // string containerinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\ContainerIdsInput.xls";
 
                 string containerinputfilepath = rootdir + @"\TestData\Outputs\ContentContainerOutput.xlsx";
 
@@ -298,38 +298,48 @@ namespace Automation_UserCMD
                 string rootdir = System.IO.Directory.GetCurrentDirectory();
                 rootdir = Path.GetDirectoryName(rootdir);
                 rootdir = Path.GetDirectoryName(rootdir);
+                // string assetinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\QuestionIdsInput.xls";
 
-               // string assetinputfilepath = rootdir + @"\TestData\Inputs\AssetSkillMapping\AssetIdsInput.xls";
-
-                string assetinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\QuestionIdsInput.xls";
+                string assetinputfilepath = rootdir + @"\TestData\Outputs\ContentOutput.xlsx";
 
                 string AssetSkillMappingfilepath = rootdir + @"\TestData\Inputs\AssetSkillMapping\AssetSkillsMapping.xls";
                 string OutputAssetSkillMapping = rootdir + @"\TestData\Outputs\AssetSkillMappingOutput.xlsx";
                 string ErrorOutputAssetSkillMapping = rootdir + @"\TestData\Outputs\AssetSkillMappingOutputError.xlsx";
 
-                DataSet dsassetid = HelperCommonMethods.ReadExcelToFillData(assetinputfilepath);
-                DataSet dsAssetSkillMapping = HelperCommonMethods.ReadExcelToFillData(AssetSkillMappingfilepath);
-                DataTable dtfinalAssetSkillMapping = new DataTable();
-                dtfinalAssetSkillMapping = dsAssetSkillMapping.Tables[0].Copy();
-                dtfinalAssetSkillMapping.Clear();
-
-                string missingdataforids = string.Empty;
-                string idcolumn = "assetid";
-                dtfinalAssetSkillMapping = HelperCommonMethods.ApplyCMDBusinessLogic_AssetSkill(dsassetid, dsAssetSkillMapping, idcolumn, out missingdataforids);
-
-                HelperCommonMethods.HideColumnsfromReportAssetSkillMapping(dtfinalAssetSkillMapping);
-                dataGridView1.DataSource = dtfinalAssetSkillMapping;
-                CreateExcelFile.CreateExcelDocument(dtfinalAssetSkillMapping, OutputAssetSkillMapping);
-
-                if (!string.IsNullOrEmpty(missingdataforids))
+                if (!File.Exists(assetinputfilepath))
                 {
-                    DataTable dtfinalSkillError = new DataTable("Errors");
-                    dtfinalSkillError = HelperCommonMethods.GenerateDataTableForErrors(dtfinalSkillError, missingdataforids);
-                    CreateExcelFile.CreateExcelDocument(dtfinalSkillError, ErrorOutputAssetSkillMapping);
+                    MessageBox.Show("Please execute Content cmd validation first to get content ids");
                 }
 
-                //MessageBox.Show("Success!! \n\n You can find output file at- \n" + @"C:\Madhav\code\Automation-UserCMD\Automation-UserCMD\TestData\Outputs");
-                HelperCommonMethods.SuccessErrorMessage(OutputAssetSkillMapping, missingdataforids);
+                else
+                {
+                    DataSet dsassetid = HelperCommonMethods.ReadExcelToFillData(assetinputfilepath);
+                    DataSet dsAssetSkillMapping = HelperCommonMethods.ReadExcelToFillData(AssetSkillMappingfilepath);
+                    DataTable dtfinalAssetSkillMapping = new DataTable();
+                    dtfinalAssetSkillMapping = dsAssetSkillMapping.Tables[0].Copy();
+                    dtfinalAssetSkillMapping.Clear();
+
+                    DataSet dsassetidnw = new DataSet();
+                    dsassetidnw = HelperCommonMethods.FillNewDatasetForQuestion(dsassetid);
+
+                    string missingdataforids = string.Empty;
+                    string idcolumn = "assetid";
+                    dtfinalAssetSkillMapping = HelperCommonMethods.ApplyCMDBusinessLogic_AssetSkill(dsassetidnw, dsAssetSkillMapping, idcolumn, out missingdataforids);
+
+                    HelperCommonMethods.HideColumnsfromReportAssetSkillMapping(dtfinalAssetSkillMapping);
+                    dataGridView1.DataSource = dtfinalAssetSkillMapping;
+                    CreateExcelFile.CreateExcelDocument(dtfinalAssetSkillMapping, OutputAssetSkillMapping);
+
+                    if (!string.IsNullOrEmpty(missingdataforids))
+                    {
+                        DataTable dtfinalSkillError = new DataTable("Errors");
+                        dtfinalSkillError = HelperCommonMethods.GenerateDataTableForErrors(dtfinalSkillError, missingdataforids);
+                        CreateExcelFile.CreateExcelDocument(dtfinalSkillError, ErrorOutputAssetSkillMapping);
+                    }
+
+                    //MessageBox.Show("Success!! \n\n You can find output file at- \n" + @"C:\Madhav\code\Automation-UserCMD\Automation-UserCMD\TestData\Outputs");
+                    HelperCommonMethods.SuccessErrorMessage(OutputAssetSkillMapping, missingdataforids);
+                }
             }
             catch (Exception ex)
             {
@@ -373,7 +383,7 @@ namespace Automation_UserCMD
                     DataTable dtfinalSkillError = new DataTable("Errors");
                     dtfinalSkillError = HelperCommonMethods.GenerateDataTableForErrors(dtfinalSkillError, missingdataforids);
                     CreateExcelFile.CreateExcelDocument(dtfinalSkillError, ErrorOutputContentContainer);
-               }
+                }
 
                 HelperCommonMethods.SuccessErrorMessage(OutputContentContainer, missingdataforids);
             }
@@ -594,20 +604,31 @@ namespace Automation_UserCMD
             rootdir = Path.GetDirectoryName(rootdir);
 
             //1. Get file Paths
-            string QuestionIdinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\QuestionIdsInput.xls";
+            //string QuestionIdinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\QuestionIdsInput.xls";
+            string QuestionIdinputfilepath = rootdir + @"\TestData\Outputs\ContentOutput.xlsx";
             string QuestionMappingfilepath = rootdir + @"\TestData\Inputs\Question Metadata\Question.xlsx";
             string OutputQuestionMetadata = rootdir + @"\TestData\Outputs\QuestionMetadataOutput.xlsx";
             string ErrorOutputQuestionMetadata = rootdir + @"\TestData\Outputs\QuestionMetadataOutputError.xlsx";
             string missingdataforids = string.Empty;
 
+            if (!File.Exists(QuestionIdinputfilepath))
+            {
+                MessageBox.Show("Please execute Content cmd validation first to get content ids");
+            }
+            
+            
             //2. Fill datasets
             DataSet dsQuestionid = HelperCommonMethods.ReadExcelToFillData(QuestionIdinputfilepath);
             DataSet dsQuestionMapping = HelperCommonMethods.ReadExcelToFillData(QuestionMappingfilepath);
             DataTable dtfinalQuesMetadata = new DataTable();
             string idcolumn = "questionid";
 
+
+            DataSet dsQuestionidnw = new DataSet();
+            dsQuestionidnw = HelperCommonMethods.FillNewDatasetForQuestion(dsQuestionid);
+
             //3. Apply Business Logic
-            dtfinalQuesMetadata = HelperCommonMethods.ApplyCMDBusinessLogic_QuestionMetadata(dsQuestionid, dsQuestionMapping, idcolumn, out missingdataforids);
+            dtfinalQuesMetadata = HelperCommonMethods.ApplyCMDBusinessLogic_QuestionMetadata(dsQuestionidnw, dsQuestionMapping, idcolumn, out missingdataforids);
 
             //4. Hide not reqd. columns
             HelperCommonMethods.HideColumnsfromReportQuestionMetadata(dtfinalQuesMetadata);
