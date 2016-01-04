@@ -109,7 +109,7 @@
     <None Include="TestData\Inputs\IdInputs\AssessmentIdsInput.xls" />
     <None Include="TestData\Inputs\IdInputs\ContainerIdsInput.xls" />
     <None Include="TestData\Inputs\IdInputs\ContentContainerNameIdsInput.xls" />
-    <None Include="TestData\Inputs\IdInputs\QuestionIdsInput.xls" />
+    <None Include="TestData\Inputs\IdInputs\QuestionIdsInput-CanBeDeleted.xls" />
     <None Include="TestData\Inputs\IdInputs\SkillNameInput.xls" />
     <None Include="TestData\Inputs\IdInputs\StudentIdsInput.xls" />
     <None Include="TestData\Inputs\Question Metadata\Question.xlsx" />

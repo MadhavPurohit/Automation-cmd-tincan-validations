@@ -133,7 +133,7 @@
             // 
             // ClassProdMapping
             // 
-            this.ClassProdMapping.Location = new System.Drawing.Point(319, 52);
+            this.ClassProdMapping.Location = new System.Drawing.Point(604, 53);
             this.ClassProdMapping.Name = "ClassProdMapping";
             this.ClassProdMapping.Size = new System.Drawing.Size(125, 23);
             this.ClassProdMapping.TabIndex = 3;
@@ -153,9 +153,9 @@
             // 
             // AssetSkillMapping
             // 
-            this.AssetSkillMapping.Location = new System.Drawing.Point(463, 52);
+            this.AssetSkillMapping.Location = new System.Drawing.Point(190, 94);
             this.AssetSkillMapping.Name = "AssetSkillMapping";
-            this.AssetSkillMapping.Size = new System.Drawing.Size(111, 23);
+            this.AssetSkillMapping.Size = new System.Drawing.Size(115, 23);
             this.AssetSkillMapping.TabIndex = 4;
             this.AssetSkillMapping.Text = "Asset Skill Mapping";
             this.AssetSkillMapping.UseVisualStyleBackColor = true;
@@ -163,9 +163,9 @@
             // 
             // ContentContainer
             // 
-            this.ContentContainer.Location = new System.Drawing.Point(594, 52);
+            this.ContentContainer.Location = new System.Drawing.Point(319, 53);
             this.ContentContainer.Name = "ContentContainer";
-            this.ContentContainer.Size = new System.Drawing.Size(101, 23);
+            this.ContentContainer.Size = new System.Drawing.Size(115, 23);
             this.ContentContainer.TabIndex = 8;
             this.ContentContainer.Text = "Content Container";
             this.ContentContainer.UseVisualStyleBackColor = true;
@@ -173,7 +173,7 @@
             // 
             // ContentContainerMapping
             // 
-            this.ContentContainerMapping.Location = new System.Drawing.Point(710, 52);
+            this.ContentContainerMapping.Location = new System.Drawing.Point(448, 53);
             this.ContentContainerMapping.Name = "ContentContainerMapping";
             this.ContentContainerMapping.Size = new System.Drawing.Size(145, 23);
             this.ContentContainerMapping.TabIndex = 9;
@@ -212,7 +212,7 @@
             // 
             // btnContent
             // 
-            this.btnContent.Location = new System.Drawing.Point(99, 94);
+            this.btnContent.Location = new System.Drawing.Point(101, 94);
             this.btnContent.Name = "btnContent";
             this.btnContent.Size = new System.Drawing.Size(75, 23);
             this.btnContent.TabIndex = 13;
@@ -222,7 +222,7 @@
             // 
             // QuestionMetadata
             // 
-            this.QuestionMetadata.Location = new System.Drawing.Point(190, 93);
+            this.QuestionMetadata.Location = new System.Drawing.Point(319, 94);
             this.QuestionMetadata.Name = "QuestionMetadata";
             this.QuestionMetadata.Size = new System.Drawing.Size(115, 23);
             this.QuestionMetadata.TabIndex = 14;
@@ -232,9 +232,9 @@
             // 
             // btnFramework
             // 
-            this.btnFramework.Location = new System.Drawing.Point(319, 93);
+            this.btnFramework.Location = new System.Drawing.Point(744, 53);
             this.btnFramework.Name = "btnFramework";
-            this.btnFramework.Size = new System.Drawing.Size(75, 23);
+            this.btnFramework.Size = new System.Drawing.Size(136, 23);
             this.btnFramework.TabIndex = 15;
             this.btnFramework.Text = "Framework";
             this.btnFramework.UseVisualStyleBackColor = true;
