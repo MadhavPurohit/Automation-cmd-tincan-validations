@@ -949,7 +949,7 @@ namespace Automation_UserCMD
                                     }
                                     if (string.IsNullOrEmpty(parent) || string.IsNullOrWhiteSpace(parent) || parent.ToString() == "System.Data.DataRow")
                                     {
-                                        if (parents.Count() > 0)
+                                        if (parents!=null && parents.Count() > 0)
                                         {
                                             if (!parents[1].Contains("Unit"))
                                             {
