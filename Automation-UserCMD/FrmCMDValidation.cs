@@ -24,9 +24,10 @@ namespace Automation_UserCMD
             AssignToolTipsToButtons();
         }
 
+        ToolTip toolTip = new ToolTip();
+
         private void AssignToolTipsToButtons()
         {
-            ToolTip toolTip = new ToolTip();
             toolTip.SetToolTip(Users, "Make sure UserId input file is present");
             toolTip.SetToolTip(Class, "Please enter correct organization id and course");
             toolTip.SetToolTip(UserValidationCMD, "Make sure UserId input file is present");
@@ -38,13 +39,66 @@ namespace Automation_UserCMD
             toolTip.SetToolTip(btnContent, "Make sure assessment id input file is present");
             toolTip.SetToolTip(QuestionMetadata, "Make sure question id input file is present");
             toolTip.SetToolTip(btnFramework, "Please enter correct grade name filter");
+            toolTip.SetToolTip(btnOrganization, "Please make sure Organization Input file is present");
+
+            toolTip.SetToolTip(tbGradeUser, "e.g. 5");
+            toolTip.SetToolTip(tbStartSecUser, "e.g. 1");
+            toolTip.SetToolTip(tbEndSecUser, "e.g. 3");
+            toolTip.SetToolTip(txtClassFilter, "e.g. 0505");
 
         }
 
         private void Users_Click(object sender, EventArgs e)
         {
+            UserCmdInputVisibility(true);
+        }
+
+        private void UserCmdInputVisibility(bool VisibilityInput)
+        {
+            lbheaderUser.Visible = VisibilityInput;
+            lbGradeUser.Visible = VisibilityInput;
+            lbStartSecUser.Visible = VisibilityInput;
+            lbEndSecUser.Visible = VisibilityInput;
+            tbGradeUser.Visible = VisibilityInput;
+            tbStartSecUser.Visible = VisibilityInput;
+            tbEndSecUser.Visible = VisibilityInput;
+            btnSubmitUsers.Visible = VisibilityInput;
+        }
+        private void btnSubmitUsers_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(tbGradeUser.Text) || string.IsNullOrEmpty(tbStartSecUser.Text) || string.IsNullOrEmpty(tbEndSecUser.Text))
+            {
+                MessageBox.Show("Please enter inputs filter range");
+            }
+
+            else
+            {
+                try
+                {
+                    int Gradefilter = Int32.Parse(tbGradeUser.Text);
+                    int StartSecfilter = Int32.Parse(tbStartSecUser.Text);
+                    int EndSecfilter = Int32.Parse(tbEndSecUser.Text);
+                    btnUser_cmdValidation();
+                    UserCmdInputVisibility(false);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Please enter correct inputs as numeric values");
+                }
+
+            }
+        }
+
+        private void btnUser_cmdValidation()
+        {
+
             try
             {
+
+                int StartSecfilter = Int32.Parse(tbStartSecUser.Text);
+                int EndSecfilter = Int32.Parse(tbEndSecUser.Text);
+
+                int Gradefilter = Int32.Parse(tbGradeUser.Text);
 
                 //HelperCommonMethods.charities();
 
@@ -54,10 +108,9 @@ namespace Automation_UserCMD
                 rootdir = Path.GetDirectoryName(rootdir);
 
                 //2. Get corresponding file path
-                string studentfilepath = rootdir + @"\TestData\Inputs\IdInputs\StudentIdsInput.xls";
+                string studentfilepath = rootdir + @"\TestData\Inputs\IdInputs\StudentIdsInput.xlsx";
                 string userfilepath = rootdir + @"\TestData\Inputs\Users\User.xlsx";
-                string OutputUser = rootdir + @"\TestData\Outputs\Users.xlsx";
-                string ErrorOutputUser = rootdir + @"\TestData\Outputs\UsersError.xlsx";
+
 
 
                 //3. Fill Datasets
@@ -66,9 +119,45 @@ namespace Automation_UserCMD
                 DataTable dtfinaluserenrolment = new DataTable();
                 string missingdataforids = string.Empty;
 
+                string OutputFileNameAppend = dsUserEnrollment.Tables[0].Rows[1][0].ToString().Replace(" ", "_").Replace("/", "-");
+                string OutputUser = rootdir + @"\TestData\Outputs\Users-" + OutputFileNameAppend + ".xlsx";
+                string ErrorOutputUser = rootdir + @"\TestData\Outputs\UsersError - " + OutputFileNameAppend + ".xlsx";
+
+
+
+                DataRow[] drinpstudents = dsStudentid.Tables[0].Select("loginName like 'dummyRow'");
+
+
+                DataTable userinfo = dsStudentid.Tables[0].Copy();
+                userinfo.Clear();
+
+                for (int i = StartSecfilter; i <= EndSecfilter; i++)
+                {
+
+                    if (i < 10)
+                    {
+                        drinpstudents = dsStudentid.Tables[0].Select("loginName like '%sec0" + i.ToString() + "%' and loginName like '%grd0" + Gradefilter.ToString() + "%'");
+                    }
+
+                    else
+                    {
+                        drinpstudents = dsStudentid.Tables[0].Select("loginName like '%sec" + i.ToString() + "%' and loginName like '%grd0" + Gradefilter.ToString() + "%'");
+                    }
+
+                    //if(drinpstudents.Count() > 0)
+                    //{
+                    //    missingdataforids+= "input users csv of schoolnet contains multi"
+                    //}
+
+                    foreach (DataRow dr in drinpstudents)
+                        userinfo.ImportRow(dr);
+
+                }
+
+
                 //4. Apply Business Logic - Mapping & Validations
                 string idcolumn = "id";
-                dtfinaluserenrolment = HelperCommonMethods.ApplyCMDBusinessLogic_Users(dsStudentid, dsUserEnrollment, idcolumn, out missingdataforids);
+                dtfinaluserenrolment = HelperCommonMethods.ApplyCMDBusinessLogic_Users(userinfo, dsUserEnrollment, idcolumn, out missingdataforids);
 
                 //5. Hide not required column
                 HelperCommonMethods.HideColumnsfromReportUsersMapping(dtfinaluserenrolment);
@@ -92,6 +181,8 @@ namespace Automation_UserCMD
             {
                 MessageBox.Show("Error occurred in processing" + ex.Message);
             }
+
+
         }
 
         private void Class_Click(object sender, EventArgs e)
@@ -101,7 +192,11 @@ namespace Automation_UserCMD
             lblClassFilter.Visible = true;
             txtClassFilter.Visible = true;
             tbReqdInput.Visible = true;
+            tbReqdInput.Text = string.Empty;
             Submit.Visible = true;
+
+            
+            toolTip.SetToolTip(tbReqdInput, "e.g. 3f02bd15-8514-4d72-9d37-f60532f01e5e - (PSOCElem) Refer Organization cmd");
         }
 
 
@@ -110,15 +205,38 @@ namespace Automation_UserCMD
             try
             {
 
-                if (LblReqdInput.Visible == true && LblReqdInput.Text == "Enter grade name filter" && txtClassFilter.Visible == false)
+                if (LblReqdInput.Visible == true && LblReqdInput.Text == "Enter grade number filter" && txtClassFilter.Visible == false)
                 {
-                    btnFramework_cmdMapping();
+                    if (string.IsNullOrEmpty(tbReqdInput.Text))
+                    {
+                        MessageBox.Show("Please enter grade number filter input");
+                    }
 
+                    else
+                    {
+                        try
+                        {
+                            int GradeNumber = Int32.Parse(tbReqdInput.Text);
+                            btnFramework_cmdMapping();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Please enter numeric as input");
+                        }
+                    }
                 }
 
                 else
                 {
-                    btnClass_cmdMapping();
+                    if (string.IsNullOrEmpty(tbReqdInput.Text) || string.IsNullOrEmpty(txtClassFilter.Text))
+                    {
+                        MessageBox.Show("Please enter correct inputs");
+                    }
+
+                    else
+                    {
+                        btnClass_cmdMapping();
+                    }
                 }
             }
 
@@ -138,13 +256,20 @@ namespace Automation_UserCMD
             rootdir = Path.GetDirectoryName(rootdir);
 
             string classinput = rootdir + @"\TestData\Inputs\Class\Class.xls";
-            string finalclass = rootdir + @"\TestData\Outputs\ClassOutput.xlsx";
-            string Errorfinalclass = rootdir + @"\TestData\Outputs\ClassOutputError.xlsx";
+
+
+            DownloadCSV.DownloadClassCMDCSV(classinput);
+
+
             string erroroutput = string.Empty;
 
             //2. Read and fill datasets
-            DataSet dsClassInput = HelperCommonMethods.ReadExcelToFillData(classinput);
+            DataSet dsClassInput = HelperCommonMethods.ReadExcelToFillData(classinput, false);
             DataTable dtfinalClassOutput = new DataTable();
+
+            string OutputFileNameAppend = dsClassInput.Tables[0].Rows[0][0].ToString().Replace(" ", "_").Replace("/", "-");
+            string finalclass = rootdir + @"\TestData\Outputs\ClassOutput - " + OutputFileNameAppend +".xlsx";
+            string Errorfinalclass = rootdir + @"\TestData\Outputs\ClassOutputError - " + OutputFileNameAppend + ".xlsx";
 
             DataTable dtclassInput = dsClassInput.Tables[0];
             string inputclassfilter = txtClassFilter.Text.ToString();
@@ -187,10 +312,9 @@ namespace Automation_UserCMD
                 rootdir = Path.GetDirectoryName(rootdir);
 
                 //1. Get file paths
-                string studentfilepath = rootdir + @"\TestData\Inputs\IdInputs\StudentIdsInput.xls";
+                string studentfilepath = rootdir + @"\TestData\Inputs\IdInputs\StudentIdsInput.xlsx";
                 string userEnrollmentfilepath = rootdir + @"\TestData\Inputs\UserEnrollment\UserEnrollment.xls";
-                string OutputUserEnrollment = rootdir + @"\TestData\Outputs\UserEnrollmentOutput.xlsx";
-                string ErrorOutputUserEnrollment = rootdir + @"\TestData\Outputs\UserEnrollmentOutputError.xlsx";
+                
 
                 //OR - 1. Get File Path from AppSettings.config
                 string[] filepaths = HelperCommonMethods.GetInputOutputFilePaths_UserValidation();
@@ -198,8 +322,13 @@ namespace Automation_UserCMD
 
                 //2. Read excel and fill datasets
                 DataSet dsStudentid = HelperCommonMethods.ReadExcelToFillData(studentfilepath);
-                DataSet dsUserEnrollment = HelperCommonMethods.ReadExcelToFillData(userEnrollmentfilepath);
+                DataSet dsUserEnrollment = HelperCommonMethods.ReadExcelToFillData(userEnrollmentfilepath, false);
                 DataTable dtfinaluserenrolment = new DataTable();
+
+                string OutputFileNameAppend = dsUserEnrollment.Tables[0].Rows[0][0].ToString().Replace(" ", "_").Replace("/", "-");
+                string OutputUserEnrollment = rootdir + @"\TestData\Outputs\UserEnrollmentOutput - " + OutputFileNameAppend + ".xlsx";
+                string ErrorOutputUserEnrollment = rootdir + @"\TestData\Outputs\UserEnrollmentOutputError - " + OutputFileNameAppend + ".xlsx";
+
                 dtfinaluserenrolment = dsUserEnrollment.Tables[0].Copy();
                 dtfinaluserenrolment.Clear();
                 string idcolumn = "userid";
@@ -249,8 +378,7 @@ namespace Automation_UserCMD
                 string containerinputfilepath = rootdir + @"\TestData\Outputs\ContentContainerOutput.xlsx";
 
                 string classProductAssfilepath = rootdir + @"\TestData\Inputs\ClassProductMapping\ClassProductAsscociation.xls";
-                string OutputClassProdMapping = rootdir + @"\TestData\Outputs\ClassProdMappingOutput.xlsx";
-                string ErrorOutputClassProdMapping = rootdir + @"\TestData\Outputs\ClassProdMappingOutputError.xlsx";
+                
 
                 if (!File.Exists(containerinputfilepath))
                 {
@@ -261,7 +389,11 @@ namespace Automation_UserCMD
                 else
                 {
                     DataSet dscontainerid = HelperCommonMethods.ReadExcelToFillData(containerinputfilepath);
-                    DataSet dsClassProdAssociation = HelperCommonMethods.ReadExcelToFillData(classProductAssfilepath);
+                    DataSet dsClassProdAssociation = HelperCommonMethods.ReadExcelToFillData(classProductAssfilepath, false);
+                    string OutputFileNameAppend = dsClassProdAssociation.Tables[0].Rows[0][0].ToString().Replace(" ", "_").Replace("/", "-");
+                    string OutputClassProdMapping = rootdir + @"\TestData\Outputs\ClassProdMappingOutput - " + OutputFileNameAppend + ".xlsx";
+                    string ErrorOutputClassProdMapping = rootdir + @"\TestData\Outputs\ClassProdMappingOutputError - " + OutputFileNameAppend +".xlsx";                    
+                    
                     DataTable dtfinalClassProdMapping = new DataTable();
                     dtfinalClassProdMapping = dsClassProdAssociation.Tables[0].Copy();
                     dtfinalClassProdMapping.Clear();
@@ -303,8 +435,7 @@ namespace Automation_UserCMD
                 string assetinputfilepath = rootdir + @"\TestData\Outputs\ContentOutput.xlsx";
 
                 string AssetSkillMappingfilepath = rootdir + @"\TestData\Inputs\AssetSkillMapping\AssetSkillsMapping.xls";
-                string OutputAssetSkillMapping = rootdir + @"\TestData\Outputs\AssetSkillMappingOutput.xlsx";
-                string ErrorOutputAssetSkillMapping = rootdir + @"\TestData\Outputs\AssetSkillMappingOutputError.xlsx";
+                
 
                 if (!File.Exists(assetinputfilepath))
                 {
@@ -314,7 +445,13 @@ namespace Automation_UserCMD
                 else
                 {
                     DataSet dsassetid = HelperCommonMethods.ReadExcelToFillData(assetinputfilepath);
-                    DataSet dsAssetSkillMapping = HelperCommonMethods.ReadExcelToFillData(AssetSkillMappingfilepath);
+                    DataSet dsAssetSkillMapping = HelperCommonMethods.ReadExcelToFillData(AssetSkillMappingfilepath, false);
+                    string OutputFileNameAppend = dsAssetSkillMapping.Tables[0].Rows[0][0].ToString().Replace(" ", "_").Replace("/", "-");
+                    string OutputAssetSkillMapping = rootdir + @"\TestData\Outputs\AssetSkillMappingOutput - " + OutputFileNameAppend +".xlsx";
+                    string ErrorOutputAssetSkillMapping = rootdir + @"\TestData\Outputs\AssetSkillMappingOutputError - " + OutputFileNameAppend + ".xlsx";
+
+
+
                     DataTable dtfinalAssetSkillMapping = new DataTable();
                     dtfinalAssetSkillMapping = dsAssetSkillMapping.Tables[0].Copy();
                     dtfinalAssetSkillMapping.Clear();
@@ -360,11 +497,15 @@ namespace Automation_UserCMD
 
                 string contentnameidsinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\ContentContainerNameIdsInput.xls";
                 string ContentContainerfilepath = rootdir + @"\TestData\Inputs\ContentContainer\Contentcontainer.xls";
-                string OutputContentContainer = rootdir + @"\TestData\Outputs\ContentContainerOutput.xlsx";
-                string ErrorOutputContentContainer = rootdir + @"\TestData\Outputs\ContentContainerOutputError.xlsx";
+                string OutputContentContainerForOtherMapping = rootdir + @"\TestData\Outputs\ContentContainerOutput.xlsx";
 
                 DataSet dscontentnameid = HelperCommonMethods.ReadExcelToFillData(contentnameidsinputfilepath);
-                DataSet dsContentContainer = HelperCommonMethods.ReadExcelToFillData(ContentContainerfilepath);
+                DataSet dsContentContainer = HelperCommonMethods.ReadExcelToFillData(ContentContainerfilepath, false);
+                string OutputFileNameAppend = dsContentContainer.Tables[0].Rows[0][0].ToString().Replace(" ", "_").Replace("/", "-");
+                string OutputContentContainer = rootdir + @"\TestData\Outputs\ContentContainerOutput - " + OutputFileNameAppend + ".xlsx";
+                string ErrorOutputContentContainer = rootdir + @"\TestData\Outputs\ContentContainerOutputError - " + OutputFileNameAppend + ".xlsx";
+
+
                 DataTable dtfinalContentContainer = new DataTable();
                 dtfinalContentContainer = dsContentContainer.Tables[0].Copy();
                 dtfinalContentContainer.Clear();
@@ -376,6 +517,7 @@ namespace Automation_UserCMD
                 HelperCommonMethods.HideColumnsfromReportContentContainer(dtfinalContentContainer);
                 dataGridView1.DataSource = dtfinalContentContainer;
                 CreateExcelFile.CreateExcelDocument(dtfinalContentContainer, OutputContentContainer);
+                CreateExcelFile.CreateExcelDocument(dtfinalContentContainer, OutputContentContainerForOtherMapping); 
                 //MessageBox.Show("Success!! \n\n You can find output file at- \n" + @"C:\Madhav\code\Automation-UserCMD\Automation-UserCMD\TestData\Outputs");
 
                 if (!string.IsNullOrEmpty(missingdataforids))
@@ -405,8 +547,7 @@ namespace Automation_UserCMD
 
                 string contentidsinputfilepath = rootdir + @"\TestData\Outputs\ContentContainerOutput.xlsx";
                 string ContentContainerMappingfilepath = rootdir + @"\TestData\Inputs\ContentContainerMapping\ContentcontainerMapping.xls";
-                string OutputContentContainerMapping = rootdir + @"\TestData\Outputs\ContentContainerMappingOutput.xlsx";
-                string ErrorOutputContentContainerMapping = rootdir + @"\TestData\Outputs\ContentContainerMappingOutputError.xlsx";
+                
 
                 if (!File.Exists(contentidsinputfilepath))
                 {
@@ -417,7 +558,11 @@ namespace Automation_UserCMD
                 else
                 {
                     DataSet dscontentnameid = HelperCommonMethods.ReadExcelToFillData(contentidsinputfilepath);
-                    DataSet dsContentContainer = HelperCommonMethods.ReadExcelToFillData(ContentContainerMappingfilepath);
+                    DataSet dsContentContainer = HelperCommonMethods.ReadExcelToFillData(ContentContainerMappingfilepath, false);
+                    string OutputFileNameAppend = dsContentContainer.Tables[0].Rows[0][0].ToString().Replace(" ", "_").Replace("/", "-");
+                    string OutputContentContainerMapping = rootdir + @"\TestData\Outputs\ContentContainerMappingOutput - " + OutputFileNameAppend + ".xlsx";
+                    string ErrorOutputContentContainerMapping = rootdir + @"\TestData\Outputs\ContentContainerMappingOutputError - " + OutputFileNameAppend + ".xlsx";
+
                     DataTable dtfinalContentContainer = new DataTable();
                     dtfinalContentContainer = dsContentContainer.Tables[0].Copy();
                     dtfinalContentContainer.Clear();
@@ -458,13 +603,16 @@ namespace Automation_UserCMD
                 //1. Get file Paths
                 string skillNameinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\SkillNameInput.xls";
                 string SkillMappingfilepath = rootdir + @"\TestData\Inputs\Skill\Skill.xls";
-                string OutputSkill = rootdir + @"\TestData\Outputs\SkillOutput.xlsx";
-                string ErrorOutputSkill = rootdir + @"\TestData\Outputs\SkillOutputError.xlsx";
+                
                 string missingdataforids = string.Empty;
 
                 //2. Fill datasets
                 DataSet dsskillName = HelperCommonMethods.ReadExcelToFillData(skillNameinputfilepath);
-                DataSet dsSkillMapping = HelperCommonMethods.ReadExcelToFillData(SkillMappingfilepath);
+                DataSet dsSkillMapping = HelperCommonMethods.ReadExcelToFillData(SkillMappingfilepath, false);
+                string OutputFileNameAppend = dsSkillMapping.Tables[0].Rows[0][0].ToString().Replace(" ", "_").Replace("/", "-");
+                string OutputSkill = rootdir + @"\TestData\Outputs\SkillOutput - " + OutputFileNameAppend + ".xlsx";
+                string ErrorOutputSkill = rootdir + @"\TestData\Outputs\SkillOutputError - " + OutputFileNameAppend +".xlsx";
+
                 DataTable dtfinalSkill = new DataTable();
                 string idcolumn = "name";
 
@@ -503,14 +651,18 @@ namespace Automation_UserCMD
 
             //1. Get file Paths
             string AssessmentIdsinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\AssessmentIdsInput.xls";
-            string Contentfilepath = rootdir + @"\TestData\Inputs\Content\Content.xlsx";
-            string OutputContent = rootdir + @"\TestData\Outputs\ContentOutput.xlsx";
-            string ErrorOutputContent = rootdir + @"\TestData\Outputs\ContentOutputError.xlsx";
+            string Contentfilepath = rootdir + @"\TestData\Inputs\Content\Content.xls";
+            string OutputContentForOtherMapping = rootdir + @"\TestData\Outputs\ContentOutput.xlsx";
+            
             string missingdataforids = string.Empty;
 
             //2. Fill datasets
             DataSet dsAssessmentIds = HelperCommonMethods.ReadExcelToFillData(AssessmentIdsinputfilepath);
-            DataSet dsSContent = HelperCommonMethods.ReadExcelToFillData(Contentfilepath);
+            DataSet dsSContent = HelperCommonMethods.ReadExcelToFillData(Contentfilepath, false);
+            string OutputFileNameAppend = dsSContent.Tables[0].Rows[0][0].ToString().Replace(" ", "_").Replace("/", "-");
+            string OutputContent = rootdir + @"\TestData\Outputs\ContentOutput - " + OutputFileNameAppend + ".xlsx";
+            string ErrorOutputContent = rootdir + @"\TestData\Outputs\ContentOutputError - " + OutputFileNameAppend + ".xlsx";
+
             DataTable dtfinalContent = new DataTable();
             string idcolumn = "id";
 
@@ -523,6 +675,7 @@ namespace Automation_UserCMD
 
             //5. Generate output Excel
             CreateExcelFile.CreateExcelDocument(dtfinalContent, OutputContent);
+            CreateExcelFile.CreateExcelDocument(dtfinalContent, OutputContentForOtherMapping);
 
             if (!string.IsNullOrEmpty(missingdataforids))
             {
@@ -543,10 +696,17 @@ namespace Automation_UserCMD
 
         private void btnFramework_Click(object sender, EventArgs e)
         {
-            LblReqdInput.Text = "Enter grade name filter";
+            LblReqdInput.Text = "Enter grade number filter";
             LblReqdInput.Visible = true;
             tbReqdInput.Visible = true;
+            tbReqdInput.Text = string.Empty;
+
             Submit.Visible = true;
+            txtClassFilter.Visible = false;
+            lblClassFilter.Visible = false;
+
+
+            toolTip.SetToolTip(tbReqdInput, "e.g. 5");
         }
 
         private void btnFramework_cmdMapping()
@@ -556,13 +716,16 @@ namespace Automation_UserCMD
             rootdir = Path.GetDirectoryName(rootdir);
             rootdir = Path.GetDirectoryName(rootdir);
 
-            string classinput = rootdir + @"\TestData\Inputs\Framework\Framework.xlsx";
-            string finalclass = rootdir + @"\TestData\Outputs\FrameworkOutput.xlsx";
-            string Errorfinalclass = rootdir + @"\TestData\Outputs\FrameworkOutputError.xlsx";
+            string classinput = rootdir + @"\TestData\Inputs\Framework\Framework.xls";
+            
             string erroroutput = string.Empty;
 
             //2. Read and fill datasets
-            DataSet dsClassInput = HelperCommonMethods.ReadExcelToFillData(classinput);
+            DataSet dsClassInput = HelperCommonMethods.ReadExcelToFillData(classinput, false);
+            string OutputFileNameAppend = dsClassInput.Tables[0].Rows[0][0].ToString().Replace(" ", "_").Replace("/", "-");
+            string finalclass = rootdir + @"\TestData\Outputs\FrameworkOutput - " + OutputFileNameAppend + ".xlsx";
+            string Errorfinalclass = rootdir + @"\TestData\Outputs\FrameworkOutputError - " + OutputFileNameAppend + ".xlsx";
+
             DataTable dtfinalClassOutput = new DataTable();
 
             DataTable dtclassInput = dsClassInput.Tables[0];
@@ -606,45 +769,53 @@ namespace Automation_UserCMD
             //1. Get file Paths
             //string QuestionIdinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\QuestionIdsInput.xls";
             string QuestionIdinputfilepath = rootdir + @"\TestData\Outputs\ContentOutput.xlsx";
-            string QuestionMappingfilepath = rootdir + @"\TestData\Inputs\Question Metadata\Question.xlsx";
-            string OutputQuestionMetadata = rootdir + @"\TestData\Outputs\QuestionMetadataOutput.xlsx";
-            string ErrorOutputQuestionMetadata = rootdir + @"\TestData\Outputs\QuestionMetadataOutputError.xlsx";
+            string QuestionMappingfilepath = rootdir + @"\TestData\Inputs\Question Metadata\Question.xls";
+            
             string missingdataforids = string.Empty;
 
             if (!File.Exists(QuestionIdinputfilepath))
             {
                 MessageBox.Show("Please execute Content cmd validation first to get content ids");
             }
-            
-            
-            //2. Fill datasets
-            DataSet dsQuestionid = HelperCommonMethods.ReadExcelToFillData(QuestionIdinputfilepath);
-            DataSet dsQuestionMapping = HelperCommonMethods.ReadExcelToFillData(QuestionMappingfilepath);
-            DataTable dtfinalQuesMetadata = new DataTable();
-            string idcolumn = "questionid";
 
-
-            DataSet dsQuestionidnw = new DataSet();
-            dsQuestionidnw = HelperCommonMethods.FillNewDatasetForQuestion(dsQuestionid);
-
-            //3. Apply Business Logic
-            dtfinalQuesMetadata = HelperCommonMethods.ApplyCMDBusinessLogic_QuestionMetadata(dsQuestionidnw, dsQuestionMapping, idcolumn, out missingdataforids);
-
-            //4. Hide not reqd. columns
-            HelperCommonMethods.HideColumnsfromReportQuestionMetadata(dtfinalQuesMetadata);
-            dataGridView1.DataSource = dtfinalQuesMetadata;
-
-            //5. Generate output Excel
-            CreateExcelFile.CreateExcelDocument(dtfinalQuesMetadata, OutputQuestionMetadata);
-
-            if (!string.IsNullOrEmpty(missingdataforids))
+            else
             {
-                DataTable dtfinalSkillError = new DataTable("Errors");
-                dtfinalSkillError = HelperCommonMethods.GenerateDataTableForErrors(dtfinalSkillError, missingdataforids);
-                CreateExcelFile.CreateExcelDocument(dtfinalSkillError, ErrorOutputQuestionMetadata);
+
+
+                //2. Fill datasets
+                DataSet dsQuestionid = HelperCommonMethods.ReadExcelToFillData(QuestionIdinputfilepath);
+                DataSet dsQuestionMapping = HelperCommonMethods.ReadExcelToFillData(QuestionMappingfilepath, false);
+                string OutputFileNameAppend = dsQuestionMapping.Tables[0].Rows[0][0].ToString().Replace(" ", "_").Replace("/", "-");
+                string OutputQuestionMetadata = rootdir + @"\TestData\Outputs\QuestionMetadataOutput" + OutputFileNameAppend + ".xlsx";
+                string ErrorOutputQuestionMetadata = rootdir + @"\TestData\Outputs\QuestionMetadataOutputError - " + OutputFileNameAppend + ".xlsx";
+
+
+                DataTable dtfinalQuesMetadata = new DataTable();
+                string idcolumn = "questionid";
+
+
+                DataSet dsQuestionidnw = new DataSet();
+                dsQuestionidnw = HelperCommonMethods.FillNewDatasetForQuestion(dsQuestionid);
+
+                //3. Apply Business Logic
+                dtfinalQuesMetadata = HelperCommonMethods.ApplyCMDBusinessLogic_QuestionMetadata(dsQuestionidnw, dsQuestionMapping, idcolumn, out missingdataforids);
+
+                //4. Hide not reqd. columns
+                HelperCommonMethods.HideColumnsfromReportQuestionMetadata(dtfinalQuesMetadata);
+                dataGridView1.DataSource = dtfinalQuesMetadata;
+
+                //5. Generate output Excel
+                CreateExcelFile.CreateExcelDocument(dtfinalQuesMetadata, OutputQuestionMetadata);
+
+                if (!string.IsNullOrEmpty(missingdataforids))
+                {
+                    DataTable dtfinalSkillError = new DataTable("Errors");
+                    dtfinalSkillError = HelperCommonMethods.GenerateDataTableForErrors(dtfinalSkillError, missingdataforids);
+                    CreateExcelFile.CreateExcelDocument(dtfinalSkillError, ErrorOutputQuestionMetadata);
+                }
+                //6. Show success failure message
+                HelperCommonMethods.SuccessErrorMessage(OutputQuestionMetadata, missingdataforids);
             }
-            //6. Show success failure message
-            HelperCommonMethods.SuccessErrorMessage(OutputQuestionMetadata, missingdataforids);
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -653,5 +824,50 @@ namespace Automation_UserCMD
             frmtincan.Show();
             this.Close();
         }
+
+        private void btnOrganization_Click(object sender, EventArgs e)
+        {
+            //1. Get Directory
+            string rootdir = System.IO.Directory.GetCurrentDirectory();
+            rootdir = Path.GetDirectoryName(rootdir);
+            rootdir = Path.GetDirectoryName(rootdir);
+
+            //1. Get file Paths
+            string skillNameinputfilepath = rootdir + @"\TestData\Inputs\IdInputs\OrganizationInput.xlsx";
+            string SkillMappingfilepath = rootdir + @"\TestData\Inputs\Organization\Organization.xlsx";
+
+            string missingdataforids = string.Empty;
+
+            //2. Fill datasets
+            DataSet dsskillName = HelperCommonMethods.ReadExcelToFillData(skillNameinputfilepath);
+            DataSet dsSkillMapping = HelperCommonMethods.ReadExcelToFillData(SkillMappingfilepath, false);
+            string OutputFileNameAppend = dsSkillMapping.Tables[0].Rows[1][0].ToString().Replace(" ", "_").Replace("/", "-");
+            string OutputSkill = rootdir + @"\TestData\Outputs\SkillOutput - " + OutputFileNameAppend + ".xlsx";
+            string ErrorOutputSkill = rootdir + @"\TestData\Outputs\SkillOutputError - " + OutputFileNameAppend + ".xlsx";
+
+            DataTable dtfinalSkill = new DataTable();
+            string idcolumn = "id";
+
+            //3. Apply Business Logic
+            dtfinalSkill = HelperCommonMethods.ApplyCMDBusinessLogic_Organization(dsskillName, dsSkillMapping, idcolumn, out missingdataforids);
+
+            //4. Hide not reqd. columns
+            HelperCommonMethods.HideColumnsfromReportOrganization(dtfinalSkill);
+            dataGridView1.DataSource = dtfinalSkill;
+
+            //5. Generate output Excel
+            CreateExcelFile.CreateExcelDocument(dtfinalSkill, OutputSkill);
+
+            if (!string.IsNullOrEmpty(missingdataforids))
+            {
+                DataTable dtfinalSkillError = new DataTable("Errors");
+                dtfinalSkillError = HelperCommonMethods.GenerateDataTableForErrors(dtfinalSkillError, missingdataforids);
+                CreateExcelFile.CreateExcelDocument(dtfinalSkillError, ErrorOutputSkill);
+            }
+            //6. Show success failure message
+            HelperCommonMethods.SuccessErrorMessage(OutputSkill, missingdataforids);
+        }
+
+      
     }
 }

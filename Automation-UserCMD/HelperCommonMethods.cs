@@ -50,7 +50,7 @@ namespace Automation_UserCMD
 
                     foreach (DataColumn column in result.Tables[0].Columns)
                     {
-                        string cName = result.Tables[0].Rows[3][column.ColumnName].ToString();
+                        string cName = result.Tables[0].Rows[2][column.ColumnName].ToString();
                         if (!result.Tables[0].Columns.Contains(cName) && cName != "")
                         {
                             column.ColumnName = cName;
@@ -682,8 +682,8 @@ namespace Automation_UserCMD
             dtfinaluserenrolment.Columns.Remove("timezone");
             dtfinaluserenrolment.Columns.Remove("state");
             dtfinaluserenrolment.Columns.Remove("type");
-            dtfinaluserenrolment.Columns.Remove("operationperformedby");
-            dtfinaluserenrolment.Columns.Remove("operationperformeddatetime");
+           // dtfinaluserenrolment.Columns.Remove("operationperformedby");
+            //dtfinaluserenrolment.Columns.Remove("operationperformeddatetime");
         }
 
         public static void HideColumnsfromReportSkill(DataTable dtfinalSkill)
@@ -874,24 +874,24 @@ namespace Automation_UserCMD
 
 
 
-                //else if (drUserEnrlDataforstudent.Count() == 4)
-                    //{
-                    //    foreach (DataRow dr in drUserEnrlDataforstudent)
-                    //    {
+                    //else if (drUserEnrlDataforstudent.Count() == 4)
+                        //{
+                        //    foreach (DataRow dr in drUserEnrlDataforstudent)
+                        //    {
 
-                //        if (thread > 1)
-                    //        {
-                    //            if (item == 1)
-                    //                dr[3] = " ";
+                    //        if (thread > 1)
+                        //        {
+                        //            if (item == 1)
+                        //                dr[3] = " ";
 
-                //            missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_ClassProdMapping(dr);
-                    //            dtfinalSkill.ImportRow(dr);
-                    //            item++;
-                    //        }
+                    //            missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_ClassProdMapping(dr);
+                        //            dtfinalSkill.ImportRow(dr);
+                        //            item++;
+                        //        }
 
-                //        thread++;
-                    //    }
-                    //}
+                    //        thread++;
+                        //    }
+                        //}
                     else
                     {
                         //BTW - It will be only 1 row
@@ -921,15 +921,25 @@ namespace Automation_UserCMD
                                     break;
 
                                 DataRow[] drItemData = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + quesid[c] + "'");
+
+                                missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Content(drItemData[0], quesid[c]);
+                                missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(drItemData[0], quesid[c]);
+                                missingdataforids += HelperCommonMethods.DoValidations_RawJsonSubTypeasAssessmentItem(drItemData[0], assetid);
+                                
                                 dtfinalSkill.ImportRow(drItemData[0]);
                             }
 
                             //2. Add AssessmentRow
+                            missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Content(dr, assetid);
+                            missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
+                            missingdataforids += HelperCommonMethods.DoValidations_RawJsonParentIsNull(dr, assetid);
                             dtfinalSkill.ImportRow(dr);
                             assetid = assetid.Replace(" ", "");
                             //3. Search for Assessment Parent in children column
                                 DataRow[] drAssessmentParent = dtAssetSkillAssoc.Select("children" + " like " + "'%" + assetid.Replace(" ","") + "%'");
 
+                                missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Content(drAssessmentParent[0], assetid);
+                                missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(drAssessmentParent[0], assetid);
                                 //Need to confirm - 1 assessment may have multip parents - considerning 1 parent as of now
                                 dtfinalSkill.ImportRow(drAssessmentParent[0]);
 
@@ -945,6 +955,9 @@ namespace Automation_UserCMD
                                         parents = parents[1].Split(new string[] { " ," }, StringSplitOptions.None);
                                         parent = parents[0].ToString();
                                         DataRow[] drItemParent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + parent.ToString() + "'");
+                                        missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Content(drItemParent[0], parent);
+                                        missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(drItemParent[0], parent);
+
                                         dtfinalSkill.ImportRow(drItemParent[0]);
                                         parent = drItemParent[0]["parents"].ToString().Replace("\"", " ");
                                     }
@@ -967,6 +980,69 @@ namespace Automation_UserCMD
             }
 
             return dtfinalSkill;
+        }
+
+        private static string DoValidations_RawJsonSubTypeasAssessmentItem(DataRow dr, string assetid)
+        {
+            string errors = string.Empty;
+            string rawjson = dr["rawjson"].ToString();
+            if (!dr["rawjson"].ToString().Contains("\"subtype\":\"assessmentitem\""))
+            {
+                errors += "Question subtype is not Assessment Item in rawJson";
+            }
+
+            //Ques Name
+            if (!dr["rawjson"].ToString().Contains("\"name\":\""))
+            {
+                errors += "Question rawJson doesn't contains Question name";
+            }
+            //Parent info
+            if (!dr["rawjson"].ToString().Contains("\"subtype\":\"assessmentitem\""))
+            {
+                errors += "Question rawJson doesn't contains Parent information";
+            }
+
+            return errors;
+        }
+
+        private static string DoValidations_RawJsonParentIsNull(DataRow dr, string assetid)
+        {
+           string errors = string.Empty;
+           string rawjson = dr["rawjson"].ToString();
+           if (!dr["rawjson"].ToString().Contains("\"parents\":null"))
+           {
+               errors += "Assessments parent is not null in rawJson";
+           }
+
+            //Should have typ
+           if (!dr["rawjson"].ToString().Contains("\"parents\":null"))
+           {
+               errors += "Assessments do not have type information in rawJson";
+           }
+
+            return errors;
+        }
+
+        private static string ValidateMandatoryAndReferenceItems_Content(DataRow dr, string refid)
+        {
+            string errors = string.Empty;
+
+            if (string.IsNullOrEmpty(dr["id"].ToString()))
+            {
+                errors += "\nMandatory column id is blank for - " + refid;
+            }
+            if (string.IsNullOrEmpty(dr["name"].ToString()))
+            {
+                errors += "\nMandatory column name is blank for - " + refid;
+            }
+            if (string.IsNullOrEmpty(dr["type"].ToString()))
+            {
+                errors += "\nMandatory column type is blank for - " + refid;
+            }
+           
+
+
+            return errors;
         }
 
         private static DataTable ConvertDatatbleColumnsToString(DataTable dtAssetSkillAssoc, int ColumnNo)
@@ -1258,19 +1334,24 @@ namespace Automation_UserCMD
 
 
 
-        internal static DataTable ApplyCMDBusinessLogic_Users(DataSet dsInputNameId, DataSet dsMappingcsv, string idcolumn, out string missingdataforids)
+        internal static DataTable ApplyCMDBusinessLogic_Users(DataTable dsInputNameId, DataSet dsMappingcsv, string idcolumn, out string missingdataforids)
         {
             DataTable dtfinalSkill = new DataTable();
 
             missingdataforids = string.Empty;
+            dsMappingcsv.Tables[0].Columns.Add("InstitutionID (Class ID1)");
+            dsMappingcsv.Tables[0].Columns.Add("InstitutionID (Class ID2)");
             dtfinalSkill = dsMappingcsv.Tables[0].Copy();
             dtfinalSkill.Clear();
-            for (int i = 0; i < dsInputNameId.Tables[0].Rows.Count; i++)
+
+           
+
+            for (int i = 0; i < dsInputNameId.Rows.Count; i++)
             {
-                DataTable dtassetid = dsInputNameId.Tables[0];
+                DataTable dtassetid = dsInputNameId;//.Tables[0];
                 DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
 
-                string assetid = dsInputNameId.Tables[0].Rows[i][0].ToString();
+                string assetid = dsInputNameId.Rows[i][0].ToString();//Tables[0].Rows[i][0].ToString();
                 string LastUserName = string.Empty;
                 if (!string.IsNullOrWhiteSpace(assetid))
                 {
@@ -1313,6 +1394,18 @@ namespace Automation_UserCMD
                         item = 0;
                         foreach (DataRow dr in drUserEnrlDataforstudent)
                         {
+                            DataRow[] drUserInfo = dsInputNameId.Select("Userid = '" + assetid + "'");
+                            if(drUserInfo.Count() > 0)
+                            {
+                               // missingdataforids += "Alert!! Schoolnet user database is having multiple rows for single user UserId - " + assetid;
+                            }
+
+                            dr["firstname"] = drUserInfo[0]["first_name"];
+                            dr["lastname"] = drUserInfo[0]["last_name"];
+                            dr["loginname"] = drUserInfo[0]["loginName"];
+                            dr["InstitutionID (Class ID1)"] = drUserInfo[0]["section_school_ID"];//"NeedInfo";//drUserInfo[0]["loginName"];
+                            dr["InstitutionID (Class ID2)"] = drUserInfo[0]["section_guid"];//"NeedInfo";//drUserInfo[0]["loginName"];
+                            
                             missingdataforids += ValidateUniqueDetailsforData_Users(LastUserName, dr, assetid);
 
                             //if (item == 1)
@@ -1320,6 +1413,7 @@ namespace Automation_UserCMD
                             missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Users(dr, assetid);
                             missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
                             dtfinalSkill.ImportRow(dr);
+                            
                             item++;
                         }
                     }
@@ -1392,7 +1486,11 @@ namespace Automation_UserCMD
                 errors += "\nMandatory column id is blank for - " + refid;
             }
 
-
+            if (dr["operationperformedby"].ToString() != "Learning Analytics")
+            {
+                errors += "\nOperation not performed by Leraning Analytics for - " + refid;
+            }
+            
             return errors;
         }
 
@@ -1685,6 +1783,103 @@ namespace Automation_UserCMD
             }
 
             return dsassetidnw;
+        }
+
+        internal static DataTable ApplyCMDBusinessLogic_Organization(DataSet dsInputNameId, DataSet dsMappingcsv, string idcolumn, out string missingdataforids)
+        {
+            DataTable dtfinalSkill = new DataTable();
+            missingdataforids = string.Empty;
+            dtfinalSkill = dsMappingcsv.Tables[0].Copy();
+            dtfinalSkill.Clear();
+            for (int i = 0; i < dsInputNameId.Tables[0].Rows.Count; i++)
+            {
+                DataTable dtassetid = dsInputNameId.Tables[0];
+                DataTable dtAssetSkillAssoc = dsMappingcsv.Tables[0];
+
+
+                string assetid = dsInputNameId.Tables[0].Rows[i]["organization_ID"].ToString();
+                if (!string.IsNullOrWhiteSpace(assetid))
+                {
+                    DataRow[] drUserEnrlDataforstudent = dtAssetSkillAssoc.Select(idcolumn + " = " + "'" + assetid + "'");
+                    int thread = 0;
+                    int item = 0;
+
+                    if (drUserEnrlDataforstudent.Count() == 0)
+                    {
+                        //No data available for this particular id in mapping sheet
+                        missingdataforids += "\n Data is missing for the id -" + assetid.ToString() + ", ";
+                    }
+
+                    else if (drUserEnrlDataforstudent.Count() == 4)
+                    {
+                        foreach (DataRow dr in drUserEnrlDataforstudent)
+                        {
+
+                            if (thread > 1)
+                            {
+                                //if (item == 1)
+                                //    dr[3] = " ";
+
+                                missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_Organization(dr, assetid);
+                                //missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
+                                dtfinalSkill.ImportRow(dr);
+                                item++;
+                            }
+
+                            thread++;
+                        }
+                    }
+                    else
+                    {
+                        item = 0;
+                        foreach (DataRow dr in drUserEnrlDataforstudent)
+                        {
+                            //if (item == 1)
+                            //    dr[3] = " ";
+
+                            //missingdataforids += HelperCommonMethods.ValidateMandatoryAndReferenceItems_ClassProdMapping(dr, assetid);
+                            //missingdataforids += HelperCommonMethods.DoValidations_OperationPerformedEvent(dr, assetid);
+
+                            dtfinalSkill.ImportRow(dr);
+                            item++;
+                        }
+                    }
+                }
+
+            }
+
+            return dtfinalSkill;
+        }
+
+        private static string ValidateMandatoryAndReferenceItems_Organization(DataRow dr, string refid)
+        {
+            string errors = string.Empty;
+
+            if (string.IsNullOrEmpty(dr["id"].ToString()))
+            {
+                errors += "\nMandatory column id is blank for - " + refid;
+            }
+            if (string.IsNullOrEmpty(dr["Name"].ToString()))
+            {
+                errors += "\nMandatory column Name is blank for - " + refid;
+            }
+            if (string.IsNullOrEmpty(dr["ParentID"].ToString()))
+            {
+                errors += "\nMandatory column ParentID is blank for - " + refid;
+            }
+            if (string.IsNullOrEmpty(dr["Type"].ToString()))
+            {
+                errors += "\nMandatory column Type is blank for - " + refid;
+            }
+            return errors;
+        }
+
+        internal static void HideColumnsfromReportOrganization(DataTable dtfinalSkill)
+        {
+            //dtfinalSkill.Columns.Remove("client_id");
+            dtfinalSkill.Columns.Remove("statementid");
+            dtfinalSkill.Columns.Remove("accesstoken");
+            dtfinalSkill.Columns.Remove("rawjson");
         }
     }
 }

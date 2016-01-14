@@ -49,6 +49,15 @@
             this.btnFramework = new System.Windows.Forms.Button();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.lbheaderUser = new System.Windows.Forms.Label();
+            this.lbGradeUser = new System.Windows.Forms.Label();
+            this.lbStartSecUser = new System.Windows.Forms.Label();
+            this.lbEndSecUser = new System.Windows.Forms.Label();
+            this.tbGradeUser = new System.Windows.Forms.TextBox();
+            this.tbStartSecUser = new System.Windows.Forms.TextBox();
+            this.tbEndSecUser = new System.Windows.Forms.TextBox();
+            this.btnSubmitUsers = new System.Windows.Forms.Button();
+            this.btnOrganization = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -122,7 +131,7 @@
             // 
             // Submit
             // 
-            this.Submit.Location = new System.Drawing.Point(626, 149);
+            this.Submit.Location = new System.Drawing.Point(662, 149);
             this.Submit.Name = "Submit";
             this.Submit.Size = new System.Drawing.Size(75, 23);
             this.Submit.TabIndex = 7;
@@ -197,16 +206,16 @@
             this.lblClassFilter.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblClassFilter.Location = new System.Drawing.Point(398, 155);
             this.lblClassFilter.Name = "lblClassFilter";
-            this.lblClassFilter.Size = new System.Drawing.Size(78, 13);
+            this.lblClassFilter.Size = new System.Drawing.Size(114, 13);
             this.lblClassFilter.TabIndex = 11;
-            this.lblClassFilter.Text = "Course Filter";
+            this.lblClassFilter.Text = "Course Name Filter";
             this.lblClassFilter.Visible = false;
             // 
             // txtClassFilter
             // 
-            this.txtClassFilter.Location = new System.Drawing.Point(486, 152);
+            this.txtClassFilter.Location = new System.Drawing.Point(518, 149);
             this.txtClassFilter.Name = "txtClassFilter";
-            this.txtClassFilter.Size = new System.Drawing.Size(123, 20);
+            this.txtClassFilter.Size = new System.Drawing.Size(122, 20);
             this.txtClassFilter.TabIndex = 12;
             this.txtClassFilter.Visible = false;
             // 
@@ -262,11 +271,109 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
+            // lbheaderUser
+            // 
+            this.lbheaderUser.AutoSize = true;
+            this.lbheaderUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbheaderUser.Location = new System.Drawing.Point(12, 130);
+            this.lbheaderUser.Name = "lbheaderUser";
+            this.lbheaderUser.Size = new System.Drawing.Size(148, 13);
+            this.lbheaderUser.TabIndex = 18;
+            this.lbheaderUser.Text = "Please select filter range";
+            this.lbheaderUser.Visible = false;
+            // 
+            // lbGradeUser
+            // 
+            this.lbGradeUser.AutoSize = true;
+            this.lbGradeUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbGradeUser.Location = new System.Drawing.Point(187, 130);
+            this.lbGradeUser.Name = "lbGradeUser";
+            this.lbGradeUser.Size = new System.Drawing.Size(41, 13);
+            this.lbGradeUser.TabIndex = 19;
+            this.lbGradeUser.Text = "Grade";
+            this.lbGradeUser.Visible = false;
+            // 
+            // lbStartSecUser
+            // 
+            this.lbStartSecUser.AutoSize = true;
+            this.lbStartSecUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbStartSecUser.Location = new System.Drawing.Point(353, 129);
+            this.lbStartSecUser.Name = "lbStartSecUser";
+            this.lbStartSecUser.Size = new System.Drawing.Size(81, 13);
+            this.lbStartSecUser.TabIndex = 20;
+            this.lbStartSecUser.Text = "Start Section";
+            this.lbStartSecUser.Visible = false;
+            // 
+            // lbEndSecUser
+            // 
+            this.lbEndSecUser.AutoSize = true;
+            this.lbEndSecUser.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbEndSecUser.Location = new System.Drawing.Point(564, 126);
+            this.lbEndSecUser.Name = "lbEndSecUser";
+            this.lbEndSecUser.Size = new System.Drawing.Size(76, 13);
+            this.lbEndSecUser.TabIndex = 21;
+            this.lbEndSecUser.Text = "End Section";
+            this.lbEndSecUser.Visible = false;
+            // 
+            // tbGradeUser
+            // 
+            this.tbGradeUser.Location = new System.Drawing.Point(235, 127);
+            this.tbGradeUser.Name = "tbGradeUser";
+            this.tbGradeUser.Size = new System.Drawing.Size(70, 20);
+            this.tbGradeUser.TabIndex = 22;
+            this.tbGradeUser.Visible = false;
+            // 
+            // tbStartSecUser
+            // 
+            this.tbStartSecUser.Location = new System.Drawing.Point(448, 122);
+            this.tbStartSecUser.Name = "tbStartSecUser";
+            this.tbStartSecUser.Size = new System.Drawing.Size(73, 20);
+            this.tbStartSecUser.TabIndex = 23;
+            this.tbStartSecUser.Visible = false;
+            // 
+            // tbEndSecUser
+            // 
+            this.tbEndSecUser.Location = new System.Drawing.Point(662, 123);
+            this.tbEndSecUser.Name = "tbEndSecUser";
+            this.tbEndSecUser.Size = new System.Drawing.Size(67, 20);
+            this.tbEndSecUser.TabIndex = 24;
+            this.tbEndSecUser.Visible = false;
+            // 
+            // btnSubmitUsers
+            // 
+            this.btnSubmitUsers.Location = new System.Drawing.Point(759, 119);
+            this.btnSubmitUsers.Name = "btnSubmitUsers";
+            this.btnSubmitUsers.Size = new System.Drawing.Size(75, 23);
+            this.btnSubmitUsers.TabIndex = 25;
+            this.btnSubmitUsers.Text = "Submit";
+            this.btnSubmitUsers.UseVisualStyleBackColor = true;
+            this.btnSubmitUsers.Visible = false;
+            this.btnSubmitUsers.Click += new System.EventHandler(this.btnSubmitUsers_Click);
+            // 
+            // btnOrganization
+            // 
+            this.btnOrganization.Location = new System.Drawing.Point(448, 94);
+            this.btnOrganization.Name = "btnOrganization";
+            this.btnOrganization.Size = new System.Drawing.Size(75, 23);
+            this.btnOrganization.TabIndex = 26;
+            this.btnOrganization.Text = "Organization";
+            this.btnOrganization.UseVisualStyleBackColor = true;
+            this.btnOrganization.Click += new System.EventHandler(this.btnOrganization_Click);
+            // 
             // FrmCMDValidation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(892, 480);
+            this.Controls.Add(this.btnOrganization);
+            this.Controls.Add(this.btnSubmitUsers);
+            this.Controls.Add(this.tbEndSecUser);
+            this.Controls.Add(this.tbStartSecUser);
+            this.Controls.Add(this.tbGradeUser);
+            this.Controls.Add(this.lbEndSecUser);
+            this.Controls.Add(this.lbStartSecUser);
+            this.Controls.Add(this.lbGradeUser);
+            this.Controls.Add(this.lbheaderUser);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.btnFramework);
@@ -320,6 +427,15 @@
         private System.Windows.Forms.Button btnFramework;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label lbheaderUser;
+        private System.Windows.Forms.Label lbGradeUser;
+        private System.Windows.Forms.Label lbStartSecUser;
+        private System.Windows.Forms.Label lbEndSecUser;
+        private System.Windows.Forms.TextBox tbGradeUser;
+        private System.Windows.Forms.TextBox tbStartSecUser;
+        private System.Windows.Forms.TextBox tbEndSecUser;
+        private System.Windows.Forms.Button btnSubmitUsers;
+        private System.Windows.Forms.Button btnOrganization;
     }
 }
 

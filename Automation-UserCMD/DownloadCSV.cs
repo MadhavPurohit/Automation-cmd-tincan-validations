@@ -11,39 +11,44 @@ using System.IO;
 
 namespace Automation_UserCMD
 {
-    [TestClass]
-    public class DownloadCSV
+    //[TestClass]
+    public static class DownloadCSV
     {
-        IWebDriver driver;
-        string client_id = "PSOC_dev";
-        string client_secret = "psocppe@123";
-        string start_date = "12/21/2015";
-        string end_date = "12/21/2015";
-        string path = null;
+        static IWebDriver driver;
+        static string client_id = "PSOC_dev";
+        static string client_secret = "psocppe@123";
+        static string start_date = "12/21/2015";
+        static string end_date = "12/21/2015";
+        static string path = null;
 
-        [TestInitialize]
-        public void TestSetup()
+        //[TestInitialize]
+        public static void TestSetup(string path)
         {
             ChromeOptions chromeOptions = new ChromeOptions();
-            string outPutDirectory = System.IO.Directory.GetCurrentDirectory();
-            outPutDirectory = Path.GetDirectoryName(outPutDirectory);
-            path = outPutDirectory + @"\TestData\Inputs";
+            //string outPutDirectory = System.IO.Directory.GetCurrentDirectory();
+            //outPutDirectory = Path.GetDirectoryName(outPutDirectory);
+            //path = outPutDirectory + @"\TestData\Inputs";
             chromeOptions.AddUserProfilePreference("download.default_directory", path);
             chromeOptions.AddUserProfilePreference("disable-popup-blocking", "true");
             driver = new ChromeDriver(chromeOptions);
         }
 
-        [TestCleanup]
-        public void Cleanup()
+        //[TestCleanup]
+        public static void Cleanup()
         {
             driver.Quit();
         }
 
-        [TestMethod]
-        public void DownloadTincanCSV()
+        //[TestMethod]
+        public static void DownloadTincanCSV(string path)
         {
-            if (System.IO.File.Exists(path + @"\tincanevents.csv"))
-                System.IO.File.Delete(path + @"\tincanevents.csv");
+            TestSetup(path);
+            
+            //if (System.IO.File.Exists(path + @"\tincanevents.csv"))
+            //    System.IO.File.Delete(path + @"\tincanevents.csv");
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
 
             string tincanurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/tincanevents&rs:Command=Render&rs:Format=CSV&StartDate=" + start_date + "&EndDate=" + end_date;
             driver.Navigate().GoToUrl(tincanurl);
@@ -51,13 +56,17 @@ namespace Automation_UserCMD
             driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
             driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
             System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
         }
 
-        [TestMethod]
-        public void DownloadClassCMDCSV()
+        //[TestMethod]
+        public static void DownloadClassCMDCSV(string path)
         {
-            if (System.IO.File.Exists(path + @"\Class.csv"))
-                System.IO.File.Delete(path + @"\Class.csv");
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
 
             string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/Class&rs:Command=Render&rs:Format=CSV&StartDate=" + start_date + "&EndDate=" + end_date;
             driver.Navigate().GoToUrl(ClassCMDurl);
@@ -65,13 +74,18 @@ namespace Automation_UserCMD
             driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
             driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
             System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
         }
 
-        [TestMethod]
-        public void DownloadClassProductAsscociationCSV()
+        //[TestMethod]
+        public static void DownloadClassProductAsscociationCSV(string path)
         {
-            if (System.IO.File.Exists(path + @"\ClassProductAsscociation.csv"))
-                System.IO.File.Delete(path + @"\ClassProductAsscociation.csv");
+            TestSetup(Path.GetDirectoryName(path));
+           
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+            
 
             string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/ClassProductAsscociation&rs:Command=Render&rs:Format=CSV&StartDate=" + start_date + "&EndDate=" + end_date;
             driver.Navigate().GoToUrl(ClassCMDurl);
@@ -79,13 +93,17 @@ namespace Automation_UserCMD
             driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
             driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
             System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
         }
 
-        [TestMethod]
-        public void DownloadContentCSV()
+        //[TestMethod]
+        public static void DownloadContentCSV(string path)
         {
-            if (System.IO.File.Exists(path + @"\Content.csv"))
-                System.IO.File.Delete(path + @"\Content.csv");
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
 
             string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/Content&rs:Command=Render&rs:Format=CSV&StartDate=" + start_date + "&EndDate=" + end_date;
             driver.Navigate().GoToUrl(ClassCMDurl);
@@ -93,13 +111,17 @@ namespace Automation_UserCMD
             driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
             driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
             System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
         }
 
-        [TestMethod]
-        public void DownloadContentassignmentCSV()
+        //[TestMethod]
+        public static void DownloadContentassignmentCSV(string path)
         {
-            if (System.IO.File.Exists(path + @"\Contentassignment.csv"))
-                System.IO.File.Delete(path + @"\Contentassignment.csv");
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
 
             string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/Contentassignment&rs:Command=Render&rs:Format=CSV&StartDate=" + start_date + "&EndDate=" + end_date;
             driver.Navigate().GoToUrl(ClassCMDurl);
@@ -107,6 +129,8 @@ namespace Automation_UserCMD
             driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
             driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
             System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
         }
     }
 }
