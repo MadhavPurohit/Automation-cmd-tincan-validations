@@ -132,5 +132,192 @@ namespace Automation_UserCMD
 
             Cleanup();
         }
+
+        public static void DownloadContentcontainerCSV(string path)
+        {
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+
+            string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/Contentcontainer&rs:Command=Render&rs:Format=CSV&StartDate="+ start_date + "&EndDate=" + end_date;
+            driver.Navigate().GoToUrl(ClassCMDurl);
+            driver.FindElement(By.Id("ctl00_RSContent_txtUserName")).SendKeys(client_id);
+            driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
+            driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
+            System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
+        }
+
+        public static void DownloadContentContainerMappingCSV(string path)
+        {
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+
+            string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/ContentContainerMapping&rs:Command=Render&rs:Format=CSV&StartDate="+ start_date + "&EndDate=" + end_date;
+            driver.Navigate().GoToUrl(ClassCMDurl);
+            driver.FindElement(By.Id("ctl00_RSContent_txtUserName")).SendKeys(client_id);
+            driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
+            driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
+            System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
+        }
+
+        public static void DownloadUserEnrollmentCSV(string path)
+        {
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+
+            string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/UserEnrollment&rs:Command=Render&rs:Format=CSV&StartDate=" + start_date + "&EndDate=" + end_date;
+            driver.Navigate().GoToUrl(ClassCMDurl);
+            driver.FindElement(By.Id("ctl00_RSContent_txtUserName")).SendKeys(client_id);
+            driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
+            driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
+            System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
+        }
+
+        public static void DownloadUserCSV(string path)
+        {
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+
+            string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/User&rs:Command=Render&rs:Format=CSV&StartDate=" + start_date + "&EndDate=" + end_date;
+            driver.Navigate().GoToUrl(ClassCMDurl);
+            driver.FindElement(By.Id("ctl00_RSContent_txtUserName")).SendKeys(client_id);
+            driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
+            driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
+            System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
+        }
+
+        public static void DownloadOrganizationCSV(string path)
+        {
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+
+            string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/Organization&rs:Command=Render&rs:Format=CSV&StartDate=03/20/2015&EndDate=" + start_date + "&EndDate=" + end_date;
+            driver.Navigate().GoToUrl(ClassCMDurl);
+            driver.FindElement(By.Id("ctl00_RSContent_txtUserName")).SendKeys(client_id);
+            driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
+            driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
+            System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
+        }
+
+        public static void DownloadSkillCSV(string path)
+        {
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+
+            string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/Skill&rs:Command=Render&rs:Format=CSV&StartDate=" + start_date + "&EndDate=" + end_date;
+            driver.Navigate().GoToUrl(ClassCMDurl);
+            driver.FindElement(By.Id("ctl00_RSContent_txtUserName")).SendKeys(client_id);
+            driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
+            driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
+            System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
+        }
+
+        public static void DownloadStandardCSV(string path)
+        {
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+
+            string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/Standard&rs:Command=Render&rs:Format=CSV&StartDate=" + start_date + "&EndDate=" + end_date;
+            driver.Navigate().GoToUrl(ClassCMDurl);
+            driver.FindElement(By.Id("ctl00_RSContent_txtUserName")).SendKeys(client_id);
+            driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
+            driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
+            System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
+        }
+
+        public static void DownloadSkillStandardMappingCSV(string path)
+        {
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+
+            string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/SkillStandardMapping&rs:Command=Render&rs:Format=CSV&StartDate="+ start_date + "&EndDate=" + end_date;
+            driver.Navigate().GoToUrl(ClassCMDurl);
+            driver.FindElement(By.Id("ctl00_RSContent_txtUserName")).SendKeys(client_id);
+            driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
+            driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
+            System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
+        }
+
+        public static void DownloadFrameworkCSV(string path)
+        {
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+
+            string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/Framework&rs:Command=Render&rs:Format=CSV&StartDate=" + start_date + "&EndDate=" + end_date;
+            driver.Navigate().GoToUrl(ClassCMDurl);
+            driver.FindElement(By.Id("ctl00_RSContent_txtUserName")).SendKeys(client_id);
+            driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
+            driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
+            System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
+        }
+
+        public static void DownloadAssetSkillMappingCSV(string path)
+        {
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+
+            string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/AssetSkillsMapping&rs:Command=Render&rs:Format=CSV&StartDate="+ start_date + "&EndDate=" + end_date;
+            driver.Navigate().GoToUrl(ClassCMDurl);
+            driver.FindElement(By.Id("ctl00_RSContent_txtUserName")).SendKeys(client_id);
+            driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
+            driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
+            System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
+        }
+
+        public static void DownloadStandardFrameworkMappingCSV(string path)
+        {
+            TestSetup(Path.GetDirectoryName(path));
+
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+
+            string ClassCMDurl = "https://reports.ppe.k12rs.pearsoncmg.com/ReportServer?/QA/Reports/StandardFrameworkMapping&rs:Command=Render&rs:Format=CSV&StartDate=" + start_date + "&EndDate=" + end_date;
+            driver.Navigate().GoToUrl(ClassCMDurl);
+            driver.FindElement(By.Id("ctl00_RSContent_txtUserName")).SendKeys(client_id);
+            driver.FindElement(By.Id("ctl00_RSContent_txtPassword")).SendKeys(client_secret);
+            driver.FindElement(By.Id("ctl00_RSContent_btnLogOn")).Click();
+            System.Threading.Thread.Sleep(7000);
+
+            Cleanup();
+        }
     }
 }
